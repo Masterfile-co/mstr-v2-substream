@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "common.proto";
+import "safe.proto";
+
+package masterfile.events.v1;
+
+message MasterfileEvent {
+	oneof event {
+		masterfile.safe.v1.SafeFactoryEvent safe_factory = 1;
+		masterfile.safe.v1.SafeEvent safe = 10;
+	}
+	masterfile.common.v1.TransactionMetadata metadata = 101;
+	uint64 ordinal = 200;
+}
+
+message MasterfileEvents {
+	repeated MasterfileEvent events = 1;
+}

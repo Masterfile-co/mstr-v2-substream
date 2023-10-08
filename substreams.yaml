@@ -5,11 +5,11 @@ package:
   name: mstr_v2
   version: v0.1.0
 
-
 protobuf:
   files:
     - common.proto
     - safe.proto
+    - masterfile.proto
   importPaths:
     - ./proto/v1
 
@@ -19,20 +19,27 @@ binaries:
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
 modules:
-  - name: map_events
+  - name: map_safes
     kind: map
     initialBlock: 3678215
     inputs:
+      - params: string
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:contract.v1.Events
+      type: proto:masterfile.safe.v1.Safes
 
-  - name: db_out
-    kind: map
-    initialBlock: 3678215
+  - name: store_safes
+    kind: store
+    updatePolicy: set
+    valueType: proto:masterfile.safe.v1.Safe
     inputs:
-      - map: map_events
+      - map: map_safes
+
+  - name: map_events
+    kind: map
+    inputs:
+      - params: string
+      - store: store_safes
+      - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:sf.substreams.sink.database.v1.DatabaseChanges
-
-
+      type: proto:masterfile.events.v1.MasterfileEvents

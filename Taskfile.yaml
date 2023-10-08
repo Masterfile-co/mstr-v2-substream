@@ -6,3 +6,11 @@ tasks:
   proto:
     cmds:
       - substreams protogen ./substreams.yaml --exclude-paths="sf/substreams,google"
+
+  build:
+    cmds:
+      - cargo build --release --target wasm32-unknown-unknown
+
+  pack:
+    cmds:
+      - substreams pack ./substreams.yaml

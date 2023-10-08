@@ -138,3 +138,12 @@ message SafeFactoryEvent {
 		string safe = 1;
 	}
 }
+
+message Safe {
+	string address = 1;
+	uint64 ordinal = 2;
+}
+
+message Safes {
+	repeated Safe safes = 1;
+}

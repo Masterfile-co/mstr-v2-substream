@@ -247,4 +247,18 @@ pub mod safe_factory_event {
         SafeDeployed(SafeDeployed),
     }
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Safe {
+    #[prost(string, tag="1")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(uint64, tag="2")]
+    pub ordinal: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Safes {
+    #[prost(message, repeated, tag="1")]
+    pub safes: ::prost::alloc::vec::Vec<Safe>,
+}
 // @@protoc_insertion_point(module)
