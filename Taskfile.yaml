@@ -1,0 +1,8 @@
+# https://taskfile.dev
+
+version: "3"
+
+tasks:
+  proto:
+    cmds:
+      - substreams protogen ./substreams.yaml --exclude-paths="sf/substreams,google"

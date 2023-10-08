@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/streamingfast/substreams/develop/schemas/manifest-schema.json
+
+specVersion: v0.1.0
+package:
+  name: mstr_v2
+  version: v0.1.0
+
+
+protobuf:
+  files:
+    - common.proto
+    - safe.proto
+  importPaths:
+    - ./proto/v1
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ./target/wasm32-unknown-unknown/release/substreams.wasm
+
+modules:
+  - name: map_events
+    kind: map
+    initialBlock: 3678215
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:contract.v1.Events
+
+  - name: db_out
+    kind: map
+    initialBlock: 3678215
+    inputs:
+      - map: map_events
+    output:
+      type: proto:sf.substreams.sink.database.v1.DatabaseChanges
+
+
