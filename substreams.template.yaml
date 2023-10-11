@@ -2,7 +2,7 @@
 
 specVersion: v0.1.0
 package:
-  name: mstr_v2_dev
+  name: mstr_v2_{{env}}
   version: v0.1.0
 
 protobuf:
@@ -21,7 +21,7 @@ binaries:
 modules:
   - name: map_safes
     kind: map
-    initialBlock: 41067648
+    initialBlock: {{initialBlock}}
     inputs:
       - params: string
       - source: sf.ethereum.type.v2.Block
