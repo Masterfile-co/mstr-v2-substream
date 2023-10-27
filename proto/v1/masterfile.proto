@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "common.proto";
 import "safe.proto";
+import "drop.proto";
 
 package masterfile.events.v1;
 
@@ -9,6 +10,8 @@ message MasterfileEvent {
 	oneof event {
 		masterfile.safe.v1.SafeFactoryEvent safe_factory = 1;
 		masterfile.safe.v1.SafeEvent safe = 10;
+		masterfile.drop.v1.DropFactoryEvent drop_factory = 20;
+		masterfile.drop.v1.DropEvent drop = 30;
 	}
 	masterfile.common.v1.TransactionMetadata metadata = 101;
 	uint64 ordinal = 200;

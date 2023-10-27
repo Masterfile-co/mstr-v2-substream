@@ -6,7 +6,7 @@ pub struct MasterfileEvent {
     pub metadata: ::core::option::Option<super::super::common::v1::TransactionMetadata>,
     #[prost(uint64, tag="200")]
     pub ordinal: u64,
-    #[prost(oneof="masterfile_event::Event", tags="1, 10")]
+    #[prost(oneof="masterfile_event::Event", tags="1, 10, 20, 30")]
     pub event: ::core::option::Option<masterfile_event::Event>,
 }
 /// Nested message and enum types in `MasterfileEvent`.
@@ -18,6 +18,10 @@ pub mod masterfile_event {
         SafeFactory(super::super::super::safe::v1::SafeFactoryEvent),
         #[prost(message, tag="10")]
         Safe(super::super::super::safe::v1::SafeEvent),
+        #[prost(message, tag="20")]
+        DropFactory(super::super::super::drop::v1::DropFactoryEvent),
+        #[prost(message, tag="30")]
+        Drop(super::super::super::drop::v1::DropEvent),
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]

@@ -15,6 +15,16 @@
         "internalType": "address",
         "name": "owner_",
         "type": "address"
+      },
+      {
+        "internalType": "contract IRegistry",
+        "name": "registry_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "version_",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -80,6 +90,32 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "FACTORY_TYPE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "VERSION",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes",
@@ -109,6 +145,19 @@
     "outputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registry",
+    "outputs": [
+      {
+        "internalType": "contract IRegistry",
         "name": "",
         "type": "address"
       }

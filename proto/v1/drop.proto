@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package masterfile.drop.v1;
+
+message DropEvent {
+	string drop_address = 1;
+	oneof event {
+		/*//////////////////////////////////////////////////////////////////////////
+                                  		DROP
+    	//////////////////////////////////////////////////////////////////////////*/
+		BundlePurchased bundle_purchased = 2;
+		BundleSet bundle_set = 3;
+		DetailsSet details_set = 4;
+		EditionProbabilitySet edition_probability_set = 5;
+		EditionPurchased edition_purchased = 6;
+		EditionRedeemed edition_redeemed = 7;
+		EditionSet edition_set = 8;
+		MysteryBoxPurchased mystery_box_purchased = 9;
+		MysteryBoxRevealRequested mystery_box_reveal_requested = 10;
+		MysteryBoxRevealed mystery_box_revealed = 11;
+		MysteryBoxSet mystery_box_set = 12;
+		/*//////////////////////////////////////////////////////////////////////////
+                                  	  ERC-1155
+    	//////////////////////////////////////////////////////////////////////////*/
+		ApprovalForAll approval_for_all = 13;
+		TransferBatch transfer_batch = 14;
+		TransferSingle transfer_single = 15;
+		/*//////////////////////////////////////////////////////////////////////////
+                              	Native Meta Transaction
+    	//////////////////////////////////////////////////////////////////////////*/
+		MetaTransactionExecuted meta_transaction_executed = 16;
+		/*//////////////////////////////////////////////////////////////////////////
+                                  	Initializable
+    	//////////////////////////////////////////////////////////////////////////*/
+		Initialized initialized = 17;
+		/*//////////////////////////////////////////////////////////////////////////
+                                  	Ownable
+    	//////////////////////////////////////////////////////////////////////////*/
+		OwnershipTransferred ownership_transferred = 18;
+	}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                                  		DROP
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message BundlePurchased {
+		string funder = 1;
+		string recipient = 2;
+		string quantity = 3;
+		string totalPrice = 4;
+	}
+
+	message BundleSet {
+		string quantity = 1;
+		string price = 2;
+		repeated uint64 tokenIds = 3;
+	}
+
+	message DetailsSet {
+		string usdc = 1;
+		string revenueRecipient = 2;
+		string randomnessProvider = 3;
+		uint64 startDate = 4;
+		uint64 endDate = 5;
+		uint64 numEditions = 6;
+	}
+
+	message EditionProbabilitySet {
+		uint64 tokenId = 1;
+		uint64 probability = 2;
+	}
+
+	message EditionPurchased {
+		string funder = 1;
+		string recipient = 2;
+		uint64 tokenId = 3;
+		string quantity = 4;
+		string totalPrice = 5;
+	}
+
+	message EditionRedeemed {
+		string requestId = 1;
+		string redeemer = 2;
+		uint64 tokenId = 3;
+	}
+
+	message EditionSet {
+		uint64 tokenId = 1;
+		string price = 2;
+		string quantity = 3;
+		string arweaveHash = 4;
+	}
+
+	message MysteryBoxPurchased {
+		string funder = 1;
+		string recipient = 2;
+		string quantity = 3;
+		string totalPrice = 4;
+	}
+
+	message MysteryBoxRevealRequested {
+		string requestId = 1;
+		string requester = 2;
+		string nonce = 3;
+	}
+
+	message MysteryBoxRevealed {
+		string requestId = 1;
+		string recipient = 2;
+		string randomness = 3;
+	}
+
+	message MysteryBoxSet {
+		string quantity = 1;
+		string price = 2;
+		uint64 redemptions = 3;
+	}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                                  	ERC-1155
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message ApprovalForAll {
+		string account = 1;
+		string operator = 2;
+		bool approved = 3;
+	}
+
+	message TransferBatch {
+		string operator = 1;
+		string from = 2;
+		string to = 3;
+		repeated uint64 ids = 4;
+		repeated uint64 values = 5;
+	}
+
+	message TransferSingle {
+		string operator = 1;
+		string from = 2;
+		string to = 3;
+		uint64 id = 4;
+		uint64 value = 5;
+	}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                              Native Meta Transaction
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message MetaTransactionExecuted {
+		string userAddress = 1;
+		string relayerAddress = 2;
+		string functionSignature = 3;
+	}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                                  Initializable
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message Initialized {}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                                  	Ownable
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message OwnershipTransferred {
+		string previousOwner = 1;
+		string newOwner = 2;
+	}
+}
+
+message DropFactoryEvent {
+	string factory_address = 1;
+
+	oneof event {
+		DropDeployed drop_deployed = 2;
+	}
+
+	message DropDeployed {
+		string drop = 1;
+		string safe = 2;
+	}
+}

@@ -9,6 +9,7 @@ protobuf:
   files:
     - common.proto
     - safe.proto
+    - drop.proto
     - masterfile.proto
   importPaths:
     - ./proto/v1

@@ -7,6 +7,13 @@ pub mod masterfile {
             // @@protoc_insertion_point(masterfile.common.v1)
         }
     }
+    pub mod drop {
+        // @@protoc_insertion_point(attribute:masterfile.drop.v1)
+        pub mod v1 {
+            include!("masterfile.drop.v1.rs");
+            // @@protoc_insertion_point(masterfile.drop.v1)
+        }
+    }
     pub mod events {
         // @@protoc_insertion_point(attribute:masterfile.events.v1)
         pub mod v1 {
