@@ -185,12 +185,33 @@
             }
         }
         #[derive(Debug, Clone, PartialEq)]
-        pub struct DeploySafe {
-            pub initializer: Vec<u8>,
-            pub nonce: substreams::scalar::BigInt,
+        pub struct DeployDrop {
+            pub salt: [u8; 32usize],
+            pub details: (
+                substreams::scalar::BigInt,
+                substreams::scalar::BigInt,
+                substreams::scalar::BigInt,
+                Vec<u8>,
+                Vec<u8>,
+                Vec<u8>,
+            ),
+            pub editions: Vec<
+                (substreams::scalar::BigInt, substreams::scalar::BigInt, [u8; 32usize]),
+            >,
+            pub probabilities: Vec<substreams::scalar::BigInt>,
+            pub mystery_box: (
+                substreams::scalar::BigInt,
+                substreams::scalar::BigInt,
+                substreams::scalar::BigInt,
+            ),
+            pub bundle: (
+                substreams::scalar::BigInt,
+                substreams::scalar::BigInt,
+                Vec<substreams::scalar::BigInt>,
+            ),
         }
-        impl DeploySafe {
-            const METHOD_ID: [u8; 4] = [36u8, 181u8, 148u8, 46u8];
+        impl DeployDrop {
+            const METHOD_ID: [u8; 4] = [249u8, 180u8, 97u8, 30u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -199,44 +220,369 @@
                     return Err("no data to decode".to_string());
                 }
                 let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Bytes, ethabi::ParamType::Uint(256usize)],
+                        &[
+                            ethabi::ParamType::FixedBytes(32usize),
+                            ethabi::ParamType::Tuple(
+                                vec![
+                                    ethabi::ParamType::Uint(64usize),
+                                    ethabi::ParamType::Uint(64usize),
+                                    ethabi::ParamType::Uint(16usize),
+                                    ethabi::ParamType::Address, ethabi::ParamType::Address,
+                                    ethabi::ParamType::Address
+                                ],
+                            ),
+                            ethabi::ParamType::Array(
+                                Box::new(
+                                    ethabi::ParamType::Tuple(
+                                        vec![
+                                            ethabi::ParamType::Uint(64usize),
+                                            ethabi::ParamType::Uint(64usize),
+                                            ethabi::ParamType::FixedBytes(32usize)
+                                        ],
+                                    ),
+                                ),
+                            ),
+                            ethabi::ParamType::Array(
+                                Box::new(ethabi::ParamType::Uint(16usize)),
+                            ),
+                            ethabi::ParamType::Tuple(
+                                vec![
+                                    ethabi::ParamType::Uint(256usize),
+                                    ethabi::ParamType::Uint(256usize),
+                                    ethabi::ParamType::Uint(8usize)
+                                ],
+                            ),
+                            ethabi::ParamType::Tuple(
+                                vec![
+                                    ethabi::ParamType::Uint(256usize),
+                                    ethabi::ParamType::Uint(256usize),
+                                    ethabi::ParamType::Array(Box::new(ethabi::ParamType::Uint(256usize)))
+                                ],
+                            ),
+                        ],
                         maybe_data.unwrap(),
                     )
                     .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
                 values.reverse();
                 Ok(Self {
-                    initializer: values
-                        .pop()
-                        .expect(INTERNAL_ERR)
-                        .into_bytes()
-                        .expect(INTERNAL_ERR),
-                    nonce: {
-                        let mut v = [0 as u8; 32];
-                        values
+                    salt: {
+                        let mut result = [0u8; 32];
+                        let v = values
                             .pop()
                             .expect(INTERNAL_ERR)
-                            .into_uint()
+                            .into_fixed_bytes()
+                            .expect(INTERNAL_ERR);
+                        result.copy_from_slice(&v);
+                        result
+                    },
+                    details: {
+                        let tuple_elements = values
+                            .pop()
                             .expect(INTERNAL_ERR)
-                            .to_big_endian(v.as_mut_slice());
-                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            .into_tuple()
+                            .expect(INTERNAL_ERR);
+                        (
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[0usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[1usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[2usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            tuple_elements[3usize]
+                                .clone()
+                                .into_address()
+                                .expect(INTERNAL_ERR)
+                                .as_bytes()
+                                .to_vec(),
+                            tuple_elements[4usize]
+                                .clone()
+                                .into_address()
+                                .expect(INTERNAL_ERR)
+                                .as_bytes()
+                                .to_vec(),
+                            tuple_elements[5usize]
+                                .clone()
+                                .into_address()
+                                .expect(INTERNAL_ERR)
+                                .as_bytes()
+                                .to_vec(),
+                        )
+                    },
+                    editions: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_array()
+                        .expect(INTERNAL_ERR)
+                        .into_iter()
+                        .map(|inner| {
+                            let tuple_elements = inner.into_tuple().expect(INTERNAL_ERR);
+                            (
+                                {
+                                    let mut v = [0 as u8; 32];
+                                    tuple_elements[0usize]
+                                        .clone()
+                                        .into_uint()
+                                        .expect(INTERNAL_ERR)
+                                        .to_big_endian(v.as_mut_slice());
+                                    substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                                },
+                                {
+                                    let mut v = [0 as u8; 32];
+                                    tuple_elements[1usize]
+                                        .clone()
+                                        .into_uint()
+                                        .expect(INTERNAL_ERR)
+                                        .to_big_endian(v.as_mut_slice());
+                                    substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                                },
+                                {
+                                    let mut result = [0u8; 32];
+                                    let v = tuple_elements[2usize]
+                                        .clone()
+                                        .into_fixed_bytes()
+                                        .expect(INTERNAL_ERR);
+                                    result.copy_from_slice(&v);
+                                    result
+                                },
+                            )
+                        })
+                        .collect(),
+                    probabilities: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_array()
+                        .expect(INTERNAL_ERR)
+                        .into_iter()
+                        .map(|inner| {
+                            let mut v = [0 as u8; 32];
+                            inner
+                                .into_uint()
+                                .expect(INTERNAL_ERR)
+                                .to_big_endian(v.as_mut_slice());
+                            substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                        })
+                        .collect(),
+                    mystery_box: {
+                        let tuple_elements = values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_tuple()
+                            .expect(INTERNAL_ERR);
+                        (
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[0usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[1usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[2usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                        )
+                    },
+                    bundle: {
+                        let tuple_elements = values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_tuple()
+                            .expect(INTERNAL_ERR);
+                        (
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[0usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            {
+                                let mut v = [0 as u8; 32];
+                                tuple_elements[1usize]
+                                    .clone()
+                                    .into_uint()
+                                    .expect(INTERNAL_ERR)
+                                    .to_big_endian(v.as_mut_slice());
+                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            },
+                            tuple_elements[2usize]
+                                .clone()
+                                .into_array()
+                                .expect(INTERNAL_ERR)
+                                .into_iter()
+                                .map(|inner| {
+                                    let mut v = [0 as u8; 32];
+                                    inner
+                                        .into_uint()
+                                        .expect(INTERNAL_ERR)
+                                        .to_big_endian(v.as_mut_slice());
+                                    substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                                })
+                                .collect(),
+                        )
                     },
                 })
             }
             pub fn encode(&self) -> Vec<u8> {
                 let data = ethabi::encode(
                     &[
-                        ethabi::Token::Bytes(self.initializer.clone()),
-                        ethabi::Token::Uint(
-                            ethabi::Uint::from_big_endian(
-                                match self.nonce.clone().to_bytes_be() {
-                                    (num_bigint::Sign::Plus, bytes) => bytes,
-                                    (num_bigint::Sign::NoSign, bytes) => bytes,
-                                    (num_bigint::Sign::Minus, _) => {
-                                        panic!("negative numbers are not supported")
-                                    }
-                                }
-                                    .as_slice(),
-                            ),
+                        ethabi::Token::FixedBytes(self.salt.as_ref().to_vec()),
+                        ethabi::Token::Tuple(
+                            vec![
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .details.0.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),),
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .details.1.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),),
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .details.2.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),),
+                                ethabi::Token::Address(ethabi::Address::from_slice(& self
+                                .details.3)),
+                                ethabi::Token::Address(ethabi::Address::from_slice(& self
+                                .details.4)),
+                                ethabi::Token::Address(ethabi::Address::from_slice(& self
+                                .details.5))
+                            ],
+                        ),
+                        {
+                            let v = self
+                                .editions
+                                .iter()
+                                .map(|inner| ethabi::Token::Tuple(
+                                    vec![
+                                        ethabi::Token::Uint(ethabi::Uint::from_big_endian(match
+                                        inner.0.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                        bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                        (num_bigint::Sign::Minus, _) => {
+                                        panic!("negative numbers are not supported") }, }
+                                        .as_slice(),),),
+                                        ethabi::Token::Uint(ethabi::Uint::from_big_endian(match
+                                        inner.1.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                        bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                        (num_bigint::Sign::Minus, _) => {
+                                        panic!("negative numbers are not supported") }, }
+                                        .as_slice(),),), ethabi::Token::FixedBytes(inner.2.as_ref()
+                                        .to_vec())
+                                    ],
+                                ))
+                                .collect();
+                            ethabi::Token::Array(v)
+                        },
+                        {
+                            let v = self
+                                .probabilities
+                                .iter()
+                                .map(|inner| ethabi::Token::Uint(
+                                    ethabi::Uint::from_big_endian(
+                                        match inner.clone().to_bytes_be() {
+                                            (num_bigint::Sign::Plus, bytes) => bytes,
+                                            (num_bigint::Sign::NoSign, bytes) => bytes,
+                                            (num_bigint::Sign::Minus, _) => {
+                                                panic!("negative numbers are not supported")
+                                            }
+                                        }
+                                            .as_slice(),
+                                    ),
+                                ))
+                                .collect();
+                            ethabi::Token::Array(v)
+                        },
+                        ethabi::Token::Tuple(
+                            vec![
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .mystery_box.0.clone().to_bytes_be() {
+                                (num_bigint::Sign::Plus, bytes) => bytes,
+                                (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),),
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .mystery_box.1.clone().to_bytes_be() {
+                                (num_bigint::Sign::Plus, bytes) => bytes,
+                                (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),),
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .mystery_box.2.clone().to_bytes_be() {
+                                (num_bigint::Sign::Plus, bytes) => bytes,
+                                (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),)
+                            ],
+                        ),
+                        ethabi::Token::Tuple(
+                            vec![
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .bundle.0.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),),
+                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
+                                .bundle.1.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),), { let v = self.bundle.2.iter().map(| inner
+                                | ethabi::Token::Uint(ethabi::Uint::from_big_endian(match
+                                inner.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                (num_bigint::Sign::Minus, _) => {
+                                panic!("negative numbers are not supported") }, }
+                                .as_slice(),),)).collect(); ethabi::Token::Array(v) }
+                            ],
                         ),
                     ],
                 );
@@ -299,8 +645,8 @@
                 }
             }
         }
-        impl substreams_ethereum::Function for DeploySafe {
-            const NAME: &'static str = "deploySafe";
+        impl substreams_ethereum::Function for DeployDrop {
+            const NAME: &'static str = "deployDrop";
             fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 Self::match_call(call)
             }
@@ -313,22 +659,47 @@
                 self.encode()
             }
         }
-        impl substreams_ethereum::rpc::RPCDecodable<Vec<u8>> for DeploySafe {
+        impl substreams_ethereum::rpc::RPCDecodable<Vec<u8>> for DeployDrop {
             fn output(data: &[u8]) -> Result<Vec<u8>, String> {
                 Self::output(data)
             }
         }
         #[derive(Debug, Clone, PartialEq)]
-        pub struct Owner {}
-        impl Owner {
-            const METHOD_ID: [u8; 4] = [141u8, 165u8, 203u8, 91u8];
+        pub struct PredictDropAddress {
+            pub salt: [u8; 32usize],
+        }
+        impl PredictDropAddress {
+            const METHOD_ID: [u8; 4] = [116u8, 179u8, 202u8, 241u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
-                Ok(Self {})
+                let maybe_data = call.input.get(4..);
+                if maybe_data.is_none() {
+                    return Err("no data to decode".to_string());
+                }
+                let mut values = ethabi::decode(
+                        &[ethabi::ParamType::FixedBytes(32usize)],
+                        maybe_data.unwrap(),
+                    )
+                    .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
+                values.reverse();
+                Ok(Self {
+                    salt: {
+                        let mut result = [0u8; 32];
+                        let v = values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_fixed_bytes()
+                            .expect(INTERNAL_ERR);
+                        result.copy_from_slice(&v);
+                        result
+                    },
+                })
             }
             pub fn encode(&self) -> Vec<u8> {
-                let data = ethabi::encode(&[]);
+                let data = ethabi::encode(
+                    &[ethabi::Token::FixedBytes(self.salt.as_ref().to_vec())],
+                );
                 let mut encoded = Vec::with_capacity(4 + data.len());
                 encoded.extend(Self::METHOD_ID);
                 encoded.extend(data);
@@ -388,8 +759,8 @@
                 }
             }
         }
-        impl substreams_ethereum::Function for Owner {
-            const NAME: &'static str = "owner";
+        impl substreams_ethereum::Function for PredictDropAddress {
+            const NAME: &'static str = "predictDropAddress";
             fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 Self::match_call(call)
             }
@@ -402,7 +773,7 @@
                 self.encode()
             }
         }
-        impl substreams_ethereum::rpc::RPCDecodable<Vec<u8>> for Owner {
+        impl substreams_ethereum::rpc::RPCDecodable<Vec<u8>> for PredictDropAddress {
             fn output(data: &[u8]) -> Result<Vec<u8>, String> {
                 Self::output(data)
             }
@@ -497,226 +868,11 @@
             }
         }
         #[derive(Debug, Clone, PartialEq)]
-        pub struct RenounceOwnership {}
-        impl RenounceOwnership {
-            const METHOD_ID: [u8; 4] = [113u8, 80u8, 24u8, 166u8];
-            pub fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Ok(Self {})
-            }
-            pub fn encode(&self) -> Vec<u8> {
-                let data = ethabi::encode(&[]);
-                let mut encoded = Vec::with_capacity(4 + data.len());
-                encoded.extend(Self::METHOD_ID);
-                encoded.extend(data);
-                encoded
-            }
-            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                match call.input.get(0..4) {
-                    Some(signature) => Self::METHOD_ID == signature,
-                    None => false,
-                }
-            }
+        pub struct SetDrop {
+            pub drop: Vec<u8>,
         }
-        impl substreams_ethereum::Function for RenounceOwnership {
-            const NAME: &'static str = "renounceOwnership";
-            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                Self::match_call(call)
-            }
-            fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Self::decode(call)
-            }
-            fn encode(&self) -> Vec<u8> {
-                self.encode()
-            }
-        }
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct SafeFactory {}
-        impl SafeFactory {
-            const METHOD_ID: [u8; 4] = [19u8, 30u8, 126u8, 28u8];
-            pub fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Ok(Self {})
-            }
-            pub fn encode(&self) -> Vec<u8> {
-                let data = ethabi::encode(&[]);
-                let mut encoded = Vec::with_capacity(4 + data.len());
-                encoded.extend(Self::METHOD_ID);
-                encoded.extend(data);
-                encoded
-            }
-            pub fn output_call(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Vec<u8>, String> {
-                Self::output(call.return_data.as_ref())
-            }
-            pub fn output(data: &[u8]) -> Result<Vec<u8>, String> {
-                let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Address],
-                        data.as_ref(),
-                    )
-                    .map_err(|e| format!("unable to decode output data: {:?}", e))?;
-                Ok(
-                    values
-                        .pop()
-                        .expect("one output data should have existed")
-                        .into_address()
-                        .expect(INTERNAL_ERR)
-                        .as_bytes()
-                        .to_vec(),
-                )
-            }
-            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                match call.input.get(0..4) {
-                    Some(signature) => Self::METHOD_ID == signature,
-                    None => false,
-                }
-            }
-            pub fn call(&self, address: Vec<u8>) -> Option<Vec<u8>> {
-                use substreams_ethereum::pb::eth::rpc;
-                let rpc_calls = rpc::RpcCalls {
-                    calls: vec![
-                        rpc::RpcCall { to_addr : address, data : self.encode(), }
-                    ],
-                };
-                let responses = substreams_ethereum::rpc::eth_call(&rpc_calls).responses;
-                let response = responses
-                    .get(0)
-                    .expect("one response should have existed");
-                if response.failed {
-                    return None;
-                }
-                match Self::output(response.raw.as_ref()) {
-                    Ok(data) => Some(data),
-                    Err(err) => {
-                        use substreams_ethereum::Function;
-                        substreams::log::info!(
-                            "Call output for function `{}` failed to decode with error: {}",
-                            Self::NAME, err
-                        );
-                        None
-                    }
-                }
-            }
-        }
-        impl substreams_ethereum::Function for SafeFactory {
-            const NAME: &'static str = "safeFactory";
-            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                Self::match_call(call)
-            }
-            fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Self::decode(call)
-            }
-            fn encode(&self) -> Vec<u8> {
-                self.encode()
-            }
-        }
-        impl substreams_ethereum::rpc::RPCDecodable<Vec<u8>> for SafeFactory {
-            fn output(data: &[u8]) -> Result<Vec<u8>, String> {
-                Self::output(data)
-            }
-        }
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct SafeImpl {}
-        impl SafeImpl {
-            const METHOD_ID: [u8; 4] = [19u8, 73u8, 205u8, 145u8];
-            pub fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Ok(Self {})
-            }
-            pub fn encode(&self) -> Vec<u8> {
-                let data = ethabi::encode(&[]);
-                let mut encoded = Vec::with_capacity(4 + data.len());
-                encoded.extend(Self::METHOD_ID);
-                encoded.extend(data);
-                encoded
-            }
-            pub fn output_call(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Vec<u8>, String> {
-                Self::output(call.return_data.as_ref())
-            }
-            pub fn output(data: &[u8]) -> Result<Vec<u8>, String> {
-                let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Address],
-                        data.as_ref(),
-                    )
-                    .map_err(|e| format!("unable to decode output data: {:?}", e))?;
-                Ok(
-                    values
-                        .pop()
-                        .expect("one output data should have existed")
-                        .into_address()
-                        .expect(INTERNAL_ERR)
-                        .as_bytes()
-                        .to_vec(),
-                )
-            }
-            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                match call.input.get(0..4) {
-                    Some(signature) => Self::METHOD_ID == signature,
-                    None => false,
-                }
-            }
-            pub fn call(&self, address: Vec<u8>) -> Option<Vec<u8>> {
-                use substreams_ethereum::pb::eth::rpc;
-                let rpc_calls = rpc::RpcCalls {
-                    calls: vec![
-                        rpc::RpcCall { to_addr : address, data : self.encode(), }
-                    ],
-                };
-                let responses = substreams_ethereum::rpc::eth_call(&rpc_calls).responses;
-                let response = responses
-                    .get(0)
-                    .expect("one response should have existed");
-                if response.failed {
-                    return None;
-                }
-                match Self::output(response.raw.as_ref()) {
-                    Ok(data) => Some(data),
-                    Err(err) => {
-                        use substreams_ethereum::Function;
-                        substreams::log::info!(
-                            "Call output for function `{}` failed to decode with error: {}",
-                            Self::NAME, err
-                        );
-                        None
-                    }
-                }
-            }
-        }
-        impl substreams_ethereum::Function for SafeImpl {
-            const NAME: &'static str = "safeImpl";
-            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                Self::match_call(call)
-            }
-            fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Self::decode(call)
-            }
-            fn encode(&self) -> Vec<u8> {
-                self.encode()
-            }
-        }
-        impl substreams_ethereum::rpc::RPCDecodable<Vec<u8>> for SafeImpl {
-            fn output(data: &[u8]) -> Result<Vec<u8>, String> {
-                Self::output(data)
-            }
-        }
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct TransferOwnership {
-            pub new_owner: Vec<u8>,
-        }
-        impl TransferOwnership {
-            const METHOD_ID: [u8; 4] = [242u8, 253u8, 227u8, 139u8];
+        impl SetDrop {
+            const METHOD_ID: [u8; 4] = [248u8, 178u8, 70u8, 38u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -731,7 +887,7 @@
                     .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
                 values.reverse();
                 Ok(Self {
-                    new_owner: values
+                    drop: values
                         .pop()
                         .expect(INTERNAL_ERR)
                         .into_address()
@@ -742,11 +898,7 @@
             }
             pub fn encode(&self) -> Vec<u8> {
                 let data = ethabi::encode(
-                    &[
-                        ethabi::Token::Address(
-                            ethabi::Address::from_slice(&self.new_owner),
-                        ),
-                    ],
+                    &[ethabi::Token::Address(ethabi::Address::from_slice(&self.drop))],
                 );
                 let mut encoded = Vec::with_capacity(4 + data.len());
                 encoded.extend(Self::METHOD_ID);
@@ -760,8 +912,67 @@
                 }
             }
         }
-        impl substreams_ethereum::Function for TransferOwnership {
-            const NAME: &'static str = "transferOwnership";
+        impl substreams_ethereum::Function for SetDrop {
+            const NAME: &'static str = "setDrop";
+            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
+                Self::match_call(call)
+            }
+            fn decode(
+                call: &substreams_ethereum::pb::eth::v2::Call,
+            ) -> Result<Self, String> {
+                Self::decode(call)
+            }
+            fn encode(&self) -> Vec<u8> {
+                self.encode()
+            }
+        }
+        #[derive(Debug, Clone, PartialEq)]
+        pub struct SetUsdc {
+            pub usdc: Vec<u8>,
+        }
+        impl SetUsdc {
+            const METHOD_ID: [u8; 4] = [203u8, 20u8, 104u8, 121u8];
+            pub fn decode(
+                call: &substreams_ethereum::pb::eth::v2::Call,
+            ) -> Result<Self, String> {
+                let maybe_data = call.input.get(4..);
+                if maybe_data.is_none() {
+                    return Err("no data to decode".to_string());
+                }
+                let mut values = ethabi::decode(
+                        &[ethabi::ParamType::Address],
+                        maybe_data.unwrap(),
+                    )
+                    .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
+                values.reverse();
+                Ok(Self {
+                    usdc: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_address()
+                        .expect(INTERNAL_ERR)
+                        .as_bytes()
+                        .to_vec(),
+                })
+            }
+            pub fn encode(&self) -> Vec<u8> {
+                let data = ethabi::encode(
+                    &[ethabi::Token::Address(ethabi::Address::from_slice(&self.usdc))],
+                );
+                let mut encoded = Vec::with_capacity(4 + data.len());
+                encoded.extend(Self::METHOD_ID);
+                encoded.extend(data);
+                encoded
+            }
+            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
+                match call.input.get(0..4) {
+                    Some(signature) => Self::METHOD_ID == signature,
+                    None => false,
+                }
+            }
+        }
+        impl substreams_ethereum::Function for SetUsdc {
+            const NAME: &'static str = "setUsdc";
             fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 Self::match_call(call)
             }
@@ -780,44 +991,44 @@
     pub mod events {
         use super::INTERNAL_ERR;
         #[derive(Debug, Clone, PartialEq)]
-        pub struct OwnershipTransferred {
-            pub previous_owner: Vec<u8>,
-            pub new_owner: Vec<u8>,
+        pub struct DropDeployed {
+            pub drop: Vec<u8>,
+            pub safe: Vec<u8>,
         }
-        impl OwnershipTransferred {
+        impl DropDeployed {
             const TOPIC_ID: [u8; 32] = [
-                139u8,
-                224u8,
-                7u8,
-                156u8,
-                83u8,
-                22u8,
-                89u8,
-                20u8,
-                19u8,
-                68u8,
-                205u8,
-                31u8,
-                208u8,
-                164u8,
-                242u8,
-                132u8,
-                25u8,
-                73u8,
                 127u8,
+                147u8,
+                38u8,
+                54u8,
+                54u8,
+                124u8,
+                205u8,
+                238u8,
+                47u8,
                 151u8,
-                34u8,
-                163u8,
-                218u8,
-                175u8,
-                227u8,
-                180u8,
-                24u8,
-                111u8,
+                164u8,
+                249u8,
+                234u8,
+                77u8,
+                63u8,
+                76u8,
+                47u8,
+                152u8,
+                112u8,
+                232u8,
+                18u8,
+                11u8,
                 107u8,
-                100u8,
-                87u8,
-                224u8,
+                208u8,
+                89u8,
+                196u8,
+                238u8,
+                12u8,
+                227u8,
+                183u8,
+                129u8,
+                176u8,
             ];
             pub fn match_log(log: &substreams_ethereum::pb::eth::v2::Log) -> bool {
                 if log.topics.len() != 3usize {
@@ -833,13 +1044,13 @@
                 log: &substreams_ethereum::pb::eth::v2::Log,
             ) -> Result<Self, String> {
                 Ok(Self {
-                    previous_owner: ethabi::decode(
+                    drop: ethabi::decode(
                             &[ethabi::ParamType::Address],
                             log.topics[1usize].as_ref(),
                         )
                         .map_err(|e| {
                             format!(
-                                "unable to decode param 'previous_owner' from topic of type 'address': {:?}",
+                                "unable to decode param 'drop' from topic of type 'address': {:?}",
                                 e
                             )
                         })?
@@ -849,92 +1060,9 @@
                         .expect(INTERNAL_ERR)
                         .as_bytes()
                         .to_vec(),
-                    new_owner: ethabi::decode(
-                            &[ethabi::ParamType::Address],
-                            log.topics[2usize].as_ref(),
-                        )
-                        .map_err(|e| {
-                            format!(
-                                "unable to decode param 'new_owner' from topic of type 'address': {:?}",
-                                e
-                            )
-                        })?
-                        .pop()
-                        .expect(INTERNAL_ERR)
-                        .into_address()
-                        .expect(INTERNAL_ERR)
-                        .as_bytes()
-                        .to_vec(),
-                })
-            }
-        }
-        impl substreams_ethereum::Event for OwnershipTransferred {
-            const NAME: &'static str = "OwnershipTransferred";
-            fn match_log(log: &substreams_ethereum::pb::eth::v2::Log) -> bool {
-                Self::match_log(log)
-            }
-            fn decode(
-                log: &substreams_ethereum::pb::eth::v2::Log,
-            ) -> Result<Self, String> {
-                Self::decode(log)
-            }
-        }
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct SafeDeployed {
-            pub safe: Vec<u8>,
-        }
-        impl SafeDeployed {
-            const TOPIC_ID: [u8; 32] = [
-                228u8,
-                20u8,
-                157u8,
-                21u8,
-                76u8,
-                76u8,
-                5u8,
-                36u8,
-                84u8,
-                46u8,
-                194u8,
-                115u8,
-                107u8,
-                173u8,
-                217u8,
-                127u8,
-                136u8,
-                118u8,
-                111u8,
-                50u8,
-                170u8,
-                97u8,
-                50u8,
-                0u8,
-                71u8,
-                13u8,
-                121u8,
-                184u8,
-                16u8,
-                49u8,
-                108u8,
-                52u8,
-            ];
-            pub fn match_log(log: &substreams_ethereum::pb::eth::v2::Log) -> bool {
-                if log.topics.len() != 2usize {
-                    return false;
-                }
-                if log.data.len() != 0usize {
-                    return false;
-                }
-                return log.topics.get(0).expect("bounds already checked").as_ref()
-                    == Self::TOPIC_ID;
-            }
-            pub fn decode(
-                log: &substreams_ethereum::pb::eth::v2::Log,
-            ) -> Result<Self, String> {
-                Ok(Self {
                     safe: ethabi::decode(
                             &[ethabi::ParamType::Address],
-                            log.topics[1usize].as_ref(),
+                            log.topics[2usize].as_ref(),
                         )
                         .map_err(|e| {
                             format!(
@@ -951,8 +1079,8 @@
                 })
             }
         }
-        impl substreams_ethereum::Event for SafeDeployed {
-            const NAME: &'static str = "SafeDeployed";
+        impl substreams_ethereum::Event for DropDeployed {
+            const NAME: &'static str = "DropDeployed";
             fn match_log(log: &substreams_ethereum::pb::eth::v2::Log) -> bool {
                 Self::match_log(log)
             }

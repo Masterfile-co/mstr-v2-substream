@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package masterfile.registry.v1;
+
+message RegistryEvent {
+
+	oneof event {
+		/*//////////////////////////////////////////////////////////////////////////
+								  		Registry
+		//////////////////////////////////////////////////////////////////////////*/
+		DeploymentAdded deployment_added = 1;
+		DeploymentRevoked deployment_revoked = 2;
+		FactoryAdded factory_added = 3;
+		FactoryRevoked factory_revoked = 4;
+
+		/*//////////////////////////////////////////////////////////////////////////
+								  	  Access Control
+		//////////////////////////////////////////////////////////////////////////*/
+		RoleAdminChanged role_admin_changed = 5;
+		RoleGranted role_granted = 6;
+		RoleRevoked role_revoked = 7;
+	}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                                  		Registry
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message DeploymentAdded {
+		string name = 1;
+		string deployment = 2;
+	}
+
+	message DeploymentRevoked {
+		string name = 1;
+		string deployment = 2;
+	}
+
+	message FactoryAdded {
+		string name = 1;
+		string factory = 2;
+		uint64 version = 3;
+	}
+
+	message FactoryRevoked {
+		string name = 1;
+		string factory = 2;
+		uint64 version = 3;
+	}
+
+	/*//////////////////////////////////////////////////////////////////////////
+                                  	  Access Control
+    //////////////////////////////////////////////////////////////////////////*/
+
+	message RoleAdminChanged {
+		string name = 1;
+		string previousAdminRole = 2;
+		string newAdminRole = 3;
+	}
+
+	message RoleGranted {
+		string role = 1;
+		string account = 2;
+		string sender = 3;
+	}
+
+	message RoleRevoked {
+		string role = 1;
+		string account = 2;
+		string sender = 3;
+	}
+}
