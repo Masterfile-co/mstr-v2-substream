@@ -49,65 +49,65 @@ message DropEvent {
 		string funder = 1;
 		string recipient = 2;
 		string quantity = 3;
-		string totalPrice = 4;
+		string total_price = 4;
 	}
 
 	message BundleSet {
 		string quantity = 1;
 		string price = 2;
-		repeated uint64 tokenIds = 3;
+		repeated uint64 token_ids = 3;
 	}
 
 	message DetailsSet {
 		string usdc = 1;
-		string revenueRecipient = 2;
-		string randomnessProvider = 3;
-		uint64 startDate = 4;
-		uint64 endDate = 5;
-		uint64 numEditions = 6;
+		string revenue_recipient = 2;
+		string randomness_provider = 3;
+		uint64 start_date = 4;
+		uint64 end_date = 5;
+		uint64 num_editions = 6;
 	}
 
 	message EditionProbabilitySet {
-		uint64 tokenId = 1;
+		uint64 token_id = 1;
 		uint64 probability = 2;
 	}
 
 	message EditionPurchased {
 		string funder = 1;
 		string recipient = 2;
-		uint64 tokenId = 3;
+		uint64 token_id = 3;
 		string quantity = 4;
-		string totalPrice = 5;
+		string total_price = 5;
 	}
 
 	message EditionRedeemed {
-		string requestId = 1;
+		string request_id = 1;
 		string redeemer = 2;
-		uint64 tokenId = 3;
+		uint64 token_id = 3;
 	}
 
 	message EditionSet {
-		uint64 tokenId = 1;
+		uint64 token_id = 1;
 		string price = 2;
 		string quantity = 3;
-		string arweaveHash = 4;
+		string arweave_hash = 4;
 	}
 
 	message MysteryBoxPurchased {
 		string funder = 1;
 		string recipient = 2;
 		string quantity = 3;
-		string totalPrice = 4;
+		string total_price = 4;
 	}
 
 	message MysteryBoxRevealRequested {
-		string requestId = 1;
+		string request_id = 1;
 		string requester = 2;
 		string nonce = 3;
 	}
 
 	message MysteryBoxRevealed {
-		string requestId = 1;
+		string request_id = 1;
 		string recipient = 2;
 		string randomness = 3;
 	}

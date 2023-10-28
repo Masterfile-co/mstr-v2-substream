@@ -4,6 +4,39 @@ import "common.proto";
 
 package masterfile.registry.v1;
 
+message DeploymentType {
+
+	oneof deployment_type {
+		Factory factory = 1;
+		Contract contract = 2;
+	}
+
+	message Factory {}
+	message Contract {}
+}
+
+message ContractType {
+
+	oneof contract_type {
+		Safe safe = 1;
+		Drop drop = 2;
+	}
+
+	message Safe {}
+	message Drop {}
+}
+
+message Deployment {
+	string address = 1;
+	uint64 ordinal = 2;
+	DeploymentType deployment_type = 3;
+	ContractType contract_type = 4;
+}
+
+message Deployments {
+	repeated Deployment deployments = 1;
+}
+
 message RegistryEvent {
 
 	oneof event {
@@ -55,8 +88,8 @@ message RegistryEvent {
 
 	message RoleAdminChanged {
 		string name = 1;
-		string previousAdminRole = 2;
-		string newAdminRole = 3;
+		string previous_admin_role = 2;
+		string new_admin_role = 3;
 	}
 
 	message RoleGranted {
