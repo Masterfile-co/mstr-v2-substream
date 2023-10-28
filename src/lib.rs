@@ -1,5 +1,5 @@
 use abi::Registry;
-use pb::masterfile::drop::v1::DropEvent;
+use pb::masterfile::drop::v1::{DropEvent, DropFactoryEvent};
 use pb::masterfile::events::v1::{masterfile_event, MasterfileEvent, MasterfileEvents};
 
 use pb::masterfile::registry::v1::{
@@ -16,6 +16,7 @@ use utils::{extract_metadata, pretty_hex};
 
 pub mod abi;
 pub mod drop;
+pub mod drop_factory;
 pub mod pb;
 pub mod registry;
 pub mod safe;
@@ -142,7 +143,20 @@ fn map_events(
                         ////////////////////////////////////////////////////////////////////////////
                         //                             	 Drop Factory                             //
                         ////////////////////////////////////////////////////////////////////////////
-                        contract_type::ContractType::Drop(_) => {}
+                        contract_type::ContractType::Drop(_) => {
+                            if let Some(event) = drop_factory::extract_drop_factory_event(&log) {
+                                events.push(MasterfileEvent {
+                                    event: Some(masterfile_event::Event::DropFactory(
+                                        DropFactoryEvent {
+                                            event: Some(event),
+                                            factory_address: address.clone(),
+                                        },
+                                    )),
+                                    ordinal,
+                                    metadata,
+                                })
+                            }
+                        }
                     }
                 }
 
