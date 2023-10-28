@@ -87,7 +87,7 @@ message RegistryEvent {
     //////////////////////////////////////////////////////////////////////////*/
 
 	message RoleAdminChanged {
-		string name = 1;
+		string role = 1;
 		string previous_admin_role = 2;
 		string new_admin_role = 3;
 	}

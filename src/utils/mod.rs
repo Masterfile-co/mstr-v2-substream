@@ -3,6 +3,13 @@ use substreams::Hex;
 use substreams_ethereum::{block_view::LogView, pb::eth::v2 as eth};
 use tiny_keccak::{Hasher, Keccak};
 
+// keccak256("MASTERFILE_SAFE")
+pub const MASTERFILE_SAFE: &str =
+    "0xbc306340ed4294a181c989b850159718efa6e294ea664b1e2cb89adc85ee108c";
+// keccak256("MASTERFILE_DROP")
+pub const MASTERFILE_DROP: &str =
+    "0xf369c64b0e118c14358967e956552ec19d2542adf089b2113e3992f7c6704b4f";
+
 pub fn pretty_hex<T: std::convert::AsRef<[u8]>>(addr: &T) -> String {
     format!("0x{}", &Hex(addr).to_string())
 }

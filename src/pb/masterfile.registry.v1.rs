@@ -123,7 +123,7 @@ pub mod registry_event {
 #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct RoleAdminChanged {
         #[prost(string, tag="1")]
-        pub name: ::prost::alloc::string::String,
+        pub role: ::prost::alloc::string::String,
         #[prost(string, tag="2")]
         pub previous_admin_role: ::prost::alloc::string::String,
         #[prost(string, tag="3")]

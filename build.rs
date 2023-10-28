@@ -85,7 +85,7 @@ pub fn generate_abi(out_dir: Option<&str>) -> Result<(), Error> {
 }
 
 fn main() -> Result<(), Error> {
-    // println!("cargo:rerun-if-changed=abi");
+    println!("cargo:rerun-if-changed=abi");
     generate_abi(Some("src"))?;
     Ok(())
 }

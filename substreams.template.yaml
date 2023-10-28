@@ -21,27 +21,27 @@ binaries:
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
 modules:
-  - name: map_safes
+  - name: map_registry
     kind: map
     initialBlock: {{initialBlock}}
     inputs:
       - params: string
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:masterfile.safe.v1.Safes
+      type: proto:masterfile.registry.v1.Deployments
 
-  - name: store_safes
+  - name: store_deployments
     kind: store
     updatePolicy: set
-    valueType: proto:masterfile.safe.v1.Safe
+    valueType: proto:masterfile.registry.v1.Deployment
     inputs:
-      - map: map_safes
+      - map: map_registry
 
   - name: map_events
     kind: map
     inputs:
       - params: string
-      - store: store_safes
+      - store: store_deployments
       - source: sf.ethereum.type.v2.Block
     output:
       type: proto:masterfile.events.v1.MasterfileEvents
