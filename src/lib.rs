@@ -1,19 +1,21 @@
 use abi::Registry;
+use pb::masterfile::drop::v1::DropEvent;
 use pb::masterfile::events::v1::{masterfile_event, MasterfileEvent, MasterfileEvents};
 
 use pb::masterfile::registry::v1::{
     contract_type, deployment_type, Deployment, DeploymentType, Deployments, RegistryEvent,
 };
-use pb::masterfile::safe::v1::{Safe, SafeEvent, SafeFactoryEvent, Safes};
+use pb::masterfile::safe::v1::{SafeEvent, SafeFactoryEvent};
 use serde::{Deserialize, Serialize};
 use serde_qs;
+use substreams::errors::Error;
 use substreams::prelude::*;
-use substreams::{errors::Error, Hex};
 use substreams_ethereum::pb::eth::v2::Block;
 use substreams_ethereum::Event;
 use utils::{extract_metadata, pretty_hex};
 
 pub mod abi;
+pub mod drop;
 pub mod pb;
 pub mod registry;
 pub mod safe;
@@ -33,6 +35,9 @@ pub fn map_registry(param: String, block: Block) -> Result<Deployments, Error> {
 
     for log in block.logs() {
         if pretty_hex(&log.address()) == params.registry {
+            ////////////////////////////////////////////////////////////////////////////
+            //                             	  Factories                               //
+            ////////////////////////////////////////////////////////////////////////////
             if let Some(event) = Registry::events::FactoryAdded::match_and_decode(log) {
                 if let Some(contract_type) = registry::map_contract_type(&pretty_hex(&event.name)) {
                     deployments.push(Deployment {
@@ -47,6 +52,9 @@ pub fn map_registry(param: String, block: Block) -> Result<Deployments, Error> {
                     })
                 }
             }
+            ////////////////////////////////////////////////////////////////////////////
+            //                             	 Deployments                              //
+            ////////////////////////////////////////////////////////////////////////////
             if let Some(event) = Registry::events::DeploymentAdded::match_and_decode(log) {
                 if let Some(contract_type) = registry::map_contract_type(&pretty_hex(&event.name)) {
                     deployments.push(Deployment {
@@ -163,7 +171,18 @@ fn map_events(
                         ////////////////////////////////////////////////////////////////////////////
                         //                             	 Drop                                    //
                         ////////////////////////////////////////////////////////////////////////////
-                        contract_type::ContractType::Drop(_) => {}
+                        contract_type::ContractType::Drop(_) => {
+                            if let Some(event) = drop::extract_drop_event(&log) {
+                                events.push(MasterfileEvent {
+                                    event: Some(masterfile_event::Event::Drop(DropEvent {
+                                        event: Some(event),
+                                        drop_address: address.clone(),
+                                    })),
+                                    ordinal,
+                                    metadata,
+                                })
+                            }
+                        }
                     }
                 }
             }
@@ -172,4 +191,3 @@ fn map_events(
 
     Ok(MasterfileEvents { events })
 }
-

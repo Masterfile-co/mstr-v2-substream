@@ -91,6 +91,7 @@ message DropEvent {
 		string price = 2;
 		string quantity = 3;
 		string arweave_hash = 4;
+		string arweave_cid = 5;
 	}
 
 	message MysteryBoxPurchased {
@@ -102,7 +103,7 @@ message DropEvent {
 
 	message MysteryBoxRevealRequested {
 		string request_id = 1;
-		string requester = 2;
+		string recipient = 2;
 		string nonce = 3;
 	}
 
@@ -133,7 +134,7 @@ message DropEvent {
 		string from = 2;
 		string to = 3;
 		repeated uint64 ids = 4;
-		repeated uint64 values = 5;
+		repeated string values = 5;
 	}
 
 	message TransferSingle {
@@ -141,7 +142,7 @@ message DropEvent {
 		string from = 2;
 		string to = 3;
 		uint64 id = 4;
-		uint64 value = 5;
+		string value = 5;
 	}
 
 	/*//////////////////////////////////////////////////////////////////////////
@@ -149,9 +150,9 @@ message DropEvent {
     //////////////////////////////////////////////////////////////////////////*/
 
 	message MetaTransactionExecuted {
-		string userAddress = 1;
-		string relayerAddress = 2;
-		string functionSignature = 3;
+		string user_address = 1;
+		string relayer_address = 2;
+		string function_signature = 3;
 	}
 
 	/*//////////////////////////////////////////////////////////////////////////
@@ -165,8 +166,8 @@ message DropEvent {
     //////////////////////////////////////////////////////////////////////////*/
 
 	message OwnershipTransferred {
-		string previousOwner = 1;
-		string newOwner = 2;
+		string previous_owner = 1;
+		string new_owner = 2;
 	}
 }
 

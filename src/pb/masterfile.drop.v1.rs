@@ -94,6 +94,8 @@ pub mod drop_event {
         pub quantity: ::prost::alloc::string::String,
         #[prost(string, tag="4")]
         pub arweave_hash: ::prost::alloc::string::String,
+        #[prost(string, tag="5")]
+        pub arweave_cid: ::prost::alloc::string::String,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -113,7 +115,7 @@ pub mod drop_event {
         #[prost(string, tag="1")]
         pub request_id: ::prost::alloc::string::String,
         #[prost(string, tag="2")]
-        pub requester: ::prost::alloc::string::String,
+        pub recipient: ::prost::alloc::string::String,
         #[prost(string, tag="3")]
         pub nonce: ::prost::alloc::string::String,
     }
@@ -162,8 +164,8 @@ pub mod drop_event {
         pub to: ::prost::alloc::string::String,
         #[prost(uint64, repeated, tag="4")]
         pub ids: ::prost::alloc::vec::Vec<u64>,
-        #[prost(uint64, repeated, tag="5")]
-        pub values: ::prost::alloc::vec::Vec<u64>,
+        #[prost(string, repeated, tag="5")]
+        pub values: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -176,8 +178,8 @@ pub mod drop_event {
         pub to: ::prost::alloc::string::String,
         #[prost(uint64, tag="4")]
         pub id: u64,
-        #[prost(uint64, tag="5")]
-        pub value: u64,
+        #[prost(string, tag="5")]
+        pub value: ::prost::alloc::string::String,
     }
     // //////////////////////////////////////////////////////////////////////////
     // Native Meta Transaction

@@ -17,6 +17,7 @@ substreams-ethereum = "0.9"
 tiny-keccak = "2"
 serde_qs = "0.12"
 serde = { version = "1.0", features = ["derive"] }
+base64 = "0.21.5"
 
 # Required so that ethabi > ethereum-types build correctly under wasm32-unknown-unknown
 [target.wasm32-unknown-unknown.dependencies]
