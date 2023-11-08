@@ -6,8 +6,8 @@ use substreams_ethereum::Event;
 use crate::{
     abi::SafeL2::events::{
         AddedOwner, ApproveHash, ChangedFallbackHandler, ChangedGuard, ChangedThreshold,
-        DisabledModule, EnabledModule, ExecutionFailure, ExecutionSuccess, SafeModuleTransaction,
-        SafeMultiSigTransaction, SafeReceived, SafeSetup,
+        DisabledModule, EnabledModule, ExecutionFailure, ExecutionSuccess, RemovedOwner,
+        SafeModuleTransaction, SafeMultiSigTransaction, SafeReceived, SafeSetup,
     },
     pb::masterfile::{
         events::v1::{masterfile_event, MasterfileEvent},
@@ -19,6 +19,11 @@ use crate::{
 pub fn extract_safe_event(log: &LogView, chain_id: &u64) -> Option<safe_event::Event> {
     if let Some(event) = AddedOwner::match_and_decode(log) {
         return Some(safe_event::Event::AddedOwner(safe_event::AddedOwner {
+            owner: pretty_hex(&event.owner),
+        }));
+    }
+    if let Some(event) = RemovedOwner::match_and_decode(log) {
+        return Some(safe_event::Event::RemovedOwner(safe_event::RemovedOwner {
             owner: pretty_hex(&event.owner),
         }));
     }
