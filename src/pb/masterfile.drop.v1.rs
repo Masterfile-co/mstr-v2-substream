@@ -4,7 +4,7 @@
 pub struct DropEvent {
     #[prost(string, tag="1")]
     pub drop_address: ::prost::alloc::string::String,
-    #[prost(oneof="drop_event::Event", tags="2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18")]
+    #[prost(oneof="drop_event::Event", tags="2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17")]
     pub event: ::core::option::Option<drop_event::Event>,
 }
 /// Nested message and enum types in `DropEvent`.
@@ -92,9 +92,11 @@ pub mod drop_event {
         pub price: ::prost::alloc::string::String,
         #[prost(string, tag="3")]
         pub quantity: ::prost::alloc::string::String,
-        #[prost(string, tag="4")]
-        pub arweave_hash: ::prost::alloc::string::String,
+        #[prost(uint64, tag="4")]
+        pub probability: u64,
         #[prost(string, tag="5")]
+        pub arweave_hash: ::prost::alloc::string::String,
+        #[prost(string, tag="6")]
         pub arweave_cid: ::prost::alloc::string::String,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
@@ -228,44 +230,42 @@ pub mod drop_event {
         #[prost(message, tag="4")]
         DetailsSet(DetailsSet),
         #[prost(message, tag="5")]
-        EditionProbabilitySet(EditionProbabilitySet),
-        #[prost(message, tag="6")]
         EditionPurchased(EditionPurchased),
-        #[prost(message, tag="7")]
+        #[prost(message, tag="6")]
         EditionRedeemed(EditionRedeemed),
-        #[prost(message, tag="8")]
+        #[prost(message, tag="7")]
         EditionSet(EditionSet),
-        #[prost(message, tag="9")]
+        #[prost(message, tag="8")]
         MysteryBoxPurchased(MysteryBoxPurchased),
-        #[prost(message, tag="10")]
+        #[prost(message, tag="9")]
         MysteryBoxRevealRequested(MysteryBoxRevealRequested),
-        #[prost(message, tag="11")]
+        #[prost(message, tag="10")]
         MysteryBoxRevealed(MysteryBoxRevealed),
-        #[prost(message, tag="12")]
+        #[prost(message, tag="11")]
         MysteryBoxSet(MysteryBoxSet),
         /// //////////////////////////////////////////////////////////////////////////
         /// ERC-1155
         /// //////////////////////////////////////////////////////////////////////////
-        #[prost(message, tag="13")]
+        #[prost(message, tag="12")]
         ApprovalForAll(ApprovalForAll),
-        #[prost(message, tag="14")]
+        #[prost(message, tag="13")]
         TransferBatch(TransferBatch),
-        #[prost(message, tag="15")]
+        #[prost(message, tag="14")]
         TransferSingle(TransferSingle),
         /// //////////////////////////////////////////////////////////////////////////
         /// Native Meta Transaction
         /// //////////////////////////////////////////////////////////////////////////
-        #[prost(message, tag="16")]
+        #[prost(message, tag="15")]
         MetaTransactionExecuted(MetaTransactionExecuted),
         /// //////////////////////////////////////////////////////////////////////////
         /// Initializable
         /// //////////////////////////////////////////////////////////////////////////
-        #[prost(message, tag="17")]
+        #[prost(message, tag="16")]
         Initialized(Initialized),
         /// //////////////////////////////////////////////////////////////////////////
         /// Ownable
         /// //////////////////////////////////////////////////////////////////////////
-        #[prost(message, tag="18")]
+        #[prost(message, tag="17")]
         OwnershipTransferred(OwnershipTransferred),
     }
 }

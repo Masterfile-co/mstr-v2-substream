@@ -3,10 +3,9 @@ use substreams_ethereum::{block_view::LogView, Event};
 
 use crate::{
     abi::MasterfileDrop::events::{
-        ApprovalForAll, BundlePurchased, BundleSet, DetailsSet, EditionProbabilitySet,
-        EditionPurchased, EditionRedeemed, EditionSet, MetaTransactionExecuted,
-        MysteryBoxPurchased, MysteryBoxRevealRequested, MysteryBoxRevealed, MysteryBoxSet,
-        OwnershipTransferred, TransferBatch, TransferSingle,
+        ApprovalForAll, BundlePurchased, BundleSet, DetailsSet, EditionPurchased, EditionRedeemed,
+        EditionSet, MetaTransactionExecuted, MysteryBoxPurchased, MysteryBoxRevealRequested,
+        MysteryBoxRevealed, MysteryBoxSet, OwnershipTransferred, TransferBatch, TransferSingle,
     },
     pb::masterfile::drop::v1::drop_event,
     utils::pretty_hex,
@@ -48,14 +47,6 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
             num_editions: event.num_editions.to_u64(),
         }));
     }
-    if let Some(event) = EditionProbabilitySet::match_and_decode(log) {
-        return Some(drop_event::Event::EditionProbabilitySet(
-            drop_event::EditionProbabilitySet {
-                token_id: event.token_id.to_u64(),
-                probability: event.probability.to_u64(),
-            },
-        ));
-    }
     if let Some(event) = EditionPurchased::match_and_decode(log) {
         return Some(drop_event::Event::EditionPurchased(
             drop_event::EditionPurchased {
@@ -81,8 +72,9 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
             token_id: event.token_id.to_u64(),
             price: event.edition.0.to_string(),
             quantity: event.edition.1.to_string(),
-            arweave_hash: general_purpose::STANDARD.encode(&event.edition.2), // Encode as base64
-            arweave_cid: pretty_hex(&event.edition.2),
+            probability: event.edition.2.to_u64(),
+            arweave_hash: general_purpose::STANDARD.encode(&event.edition.3), // Encode as base64
+            arweave_cid: pretty_hex(&event.edition.3),
         }));
     }
     if let Some(event) = MysteryBoxPurchased::match_and_decode(log) {

@@ -194,11 +194,16 @@
                 Vec<u8>,
                 Vec<u8>,
                 Vec<u8>,
+                [u8; 32usize],
             ),
             pub editions: Vec<
-                (substreams::scalar::BigInt, substreams::scalar::BigInt, [u8; 32usize]),
+                (
+                    substreams::scalar::BigInt,
+                    substreams::scalar::BigInt,
+                    substreams::scalar::BigInt,
+                    [u8; 32usize],
+                ),
             >,
-            pub probabilities: Vec<substreams::scalar::BigInt>,
             pub mystery_box: (
                 substreams::scalar::BigInt,
                 substreams::scalar::BigInt,
@@ -211,7 +216,7 @@
             ),
         }
         impl DeployDrop {
-            const METHOD_ID: [u8; 4] = [249u8, 180u8, 97u8, 30u8];
+            const METHOD_ID: [u8; 4] = [60u8, 180u8, 215u8, 38u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -228,7 +233,8 @@
                                     ethabi::ParamType::Uint(64usize),
                                     ethabi::ParamType::Uint(16usize),
                                     ethabi::ParamType::Address, ethabi::ParamType::Address,
-                                    ethabi::ParamType::Address
+                                    ethabi::ParamType::Address,
+                                    ethabi::ParamType::FixedBytes(32usize)
                                 ],
                             ),
                             ethabi::ParamType::Array(
@@ -237,13 +243,11 @@
                                         vec![
                                             ethabi::ParamType::Uint(64usize),
                                             ethabi::ParamType::Uint(64usize),
+                                            ethabi::ParamType::Uint(16usize),
                                             ethabi::ParamType::FixedBytes(32usize)
                                         ],
                                     ),
                                 ),
-                            ),
-                            ethabi::ParamType::Array(
-                                Box::new(ethabi::ParamType::Uint(16usize)),
                             ),
                             ethabi::ParamType::Tuple(
                                 vec![
@@ -327,6 +331,15 @@
                                 .expect(INTERNAL_ERR)
                                 .as_bytes()
                                 .to_vec(),
+                            {
+                                let mut result = [0u8; 32];
+                                let v = tuple_elements[6usize]
+                                    .clone()
+                                    .into_fixed_bytes()
+                                    .expect(INTERNAL_ERR);
+                                result.copy_from_slice(&v);
+                                result
+                            },
                         )
                     },
                     editions: values
@@ -357,8 +370,17 @@
                                     substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                                 },
                                 {
+                                    let mut v = [0 as u8; 32];
+                                    tuple_elements[2usize]
+                                        .clone()
+                                        .into_uint()
+                                        .expect(INTERNAL_ERR)
+                                        .to_big_endian(v.as_mut_slice());
+                                    substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                                },
+                                {
                                     let mut result = [0u8; 32];
-                                    let v = tuple_elements[2usize]
+                                    let v = tuple_elements[3usize]
                                         .clone()
                                         .into_fixed_bytes()
                                         .expect(INTERNAL_ERR);
@@ -366,21 +388,6 @@
                                     result
                                 },
                             )
-                        })
-                        .collect(),
-                    probabilities: values
-                        .pop()
-                        .expect(INTERNAL_ERR)
-                        .into_array()
-                        .expect(INTERNAL_ERR)
-                        .into_iter()
-                        .map(|inner| {
-                            let mut v = [0 as u8; 32];
-                            inner
-                                .into_uint()
-                                .expect(INTERNAL_ERR)
-                                .to_big_endian(v.as_mut_slice());
-                            substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                         })
                         .collect(),
                     mystery_box: {
@@ -491,7 +498,8 @@
                                 ethabi::Token::Address(ethabi::Address::from_slice(& self
                                 .details.4)),
                                 ethabi::Token::Address(ethabi::Address::from_slice(& self
-                                .details.5))
+                                .details.5)), ethabi::Token::FixedBytes(self.details.6
+                                .as_ref().to_vec())
                             ],
                         ),
                         {
@@ -511,28 +519,15 @@
                                         bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
                                         (num_bigint::Sign::Minus, _) => {
                                         panic!("negative numbers are not supported") }, }
-                                        .as_slice(),),), ethabi::Token::FixedBytes(inner.2.as_ref()
+                                        .as_slice(),),),
+                                        ethabi::Token::Uint(ethabi::Uint::from_big_endian(match
+                                        inner.2.clone().to_bytes_be() { (num_bigint::Sign::Plus,
+                                        bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
+                                        (num_bigint::Sign::Minus, _) => {
+                                        panic!("negative numbers are not supported") }, }
+                                        .as_slice(),),), ethabi::Token::FixedBytes(inner.3.as_ref()
                                         .to_vec())
                                     ],
-                                ))
-                                .collect();
-                            ethabi::Token::Array(v)
-                        },
-                        {
-                            let v = self
-                                .probabilities
-                                .iter()
-                                .map(|inner| ethabi::Token::Uint(
-                                    ethabi::Uint::from_big_endian(
-                                        match inner.clone().to_bytes_be() {
-                                            (num_bigint::Sign::Plus, bytes) => bytes,
-                                            (num_bigint::Sign::NoSign, bytes) => bytes,
-                                            (num_bigint::Sign::Minus, _) => {
-                                                panic!("negative numbers are not supported")
-                                            }
-                                        }
-                                            .as_slice(),
-                                    ),
                                 ))
                                 .collect();
                             ethabi::Token::Array(v)

@@ -13,32 +13,31 @@ message DropEvent {
 		BundlePurchased bundle_purchased = 2;
 		BundleSet bundle_set = 3;
 		DetailsSet details_set = 4;
-		EditionProbabilitySet edition_probability_set = 5;
-		EditionPurchased edition_purchased = 6;
-		EditionRedeemed edition_redeemed = 7;
-		EditionSet edition_set = 8;
-		MysteryBoxPurchased mystery_box_purchased = 9;
-		MysteryBoxRevealRequested mystery_box_reveal_requested = 10;
-		MysteryBoxRevealed mystery_box_revealed = 11;
-		MysteryBoxSet mystery_box_set = 12;
+		EditionPurchased edition_purchased = 5;
+		EditionRedeemed edition_redeemed = 6;
+		EditionSet edition_set = 7;
+		MysteryBoxPurchased mystery_box_purchased = 8;
+		MysteryBoxRevealRequested mystery_box_reveal_requested = 9;
+		MysteryBoxRevealed mystery_box_revealed = 10;
+		MysteryBoxSet mystery_box_set = 11;
 		/*//////////////////////////////////////////////////////////////////////////
                                   	  ERC-1155
     	//////////////////////////////////////////////////////////////////////////*/
-		ApprovalForAll approval_for_all = 13;
-		TransferBatch transfer_batch = 14;
-		TransferSingle transfer_single = 15;
+		ApprovalForAll approval_for_all = 12;
+		TransferBatch transfer_batch = 13;
+		TransferSingle transfer_single = 14;
 		/*//////////////////////////////////////////////////////////////////////////
                               	Native Meta Transaction
     	//////////////////////////////////////////////////////////////////////////*/
-		MetaTransactionExecuted meta_transaction_executed = 16;
+		MetaTransactionExecuted meta_transaction_executed = 15;
 		/*//////////////////////////////////////////////////////////////////////////
                                   	Initializable
     	//////////////////////////////////////////////////////////////////////////*/
-		Initialized initialized = 17;
+		Initialized initialized = 16;
 		/*//////////////////////////////////////////////////////////////////////////
                                   	Ownable
     	//////////////////////////////////////////////////////////////////////////*/
-		OwnershipTransferred ownership_transferred = 18;
+		OwnershipTransferred ownership_transferred = 17;
 	}
 
 	/*//////////////////////////////////////////////////////////////////////////
@@ -90,8 +89,9 @@ message DropEvent {
 		uint64 token_id = 1;
 		string price = 2;
 		string quantity = 3;
-		string arweave_hash = 4;
-		string arweave_cid = 5;
+		uint64 probability = 4;
+		string arweave_hash = 5;
+		string arweave_cid = 6;
 	}
 
 	message MysteryBoxPurchased {
