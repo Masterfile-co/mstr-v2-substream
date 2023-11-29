@@ -1,1614 +1,1614 @@
 [
   {
-    "type": "error",
     "inputs": [],
-    "name": "DropConcluded"
+    "name": "DropConcluded",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "DropNotStarted"
+    "name": "DropNotStarted",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
-        "name": "sender",
         "internalType": "address",
+        "name": "sender",
         "type": "address"
       },
       {
+        "internalType": "uint256",
         "name": "balance",
-        "internalType": "uint256",
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
         "name": "needed",
-        "internalType": "uint256",
         "type": "uint256"
       },
       {
-        "name": "tokenId",
         "internalType": "uint256",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
-    "name": "ERC1155InsufficientBalance"
+    "name": "ERC1155InsufficientBalance",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
+        "internalType": "address",
         "name": "approver",
-        "internalType": "address",
         "type": "address"
       }
     ],
-    "name": "ERC1155InvalidApprover"
+    "name": "ERC1155InvalidApprover",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
+        "internalType": "uint256",
         "name": "idsLength",
-        "internalType": "uint256",
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
         "name": "valuesLength",
-        "internalType": "uint256",
         "type": "uint256"
       }
     ],
-    "name": "ERC1155InvalidArrayLength"
+    "name": "ERC1155InvalidArrayLength",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
-        "name": "operator",
         "internalType": "address",
+        "name": "operator",
         "type": "address"
       }
     ],
-    "name": "ERC1155InvalidOperator"
+    "name": "ERC1155InvalidOperator",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
+        "internalType": "address",
         "name": "receiver",
-        "internalType": "address",
         "type": "address"
       }
     ],
-    "name": "ERC1155InvalidReceiver"
+    "name": "ERC1155InvalidReceiver",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
+        "internalType": "address",
         "name": "sender",
-        "internalType": "address",
         "type": "address"
       }
     ],
-    "name": "ERC1155InvalidSender"
+    "name": "ERC1155InvalidSender",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
-        "name": "operator",
         "internalType": "address",
+        "name": "operator",
         "type": "address"
       },
       {
-        "name": "owner",
         "internalType": "address",
+        "name": "owner",
         "type": "address"
       }
     ],
-    "name": "ERC1155MissingApprovalForAll"
+    "name": "ERC1155MissingApprovalForAll",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidDropWindow"
+    "name": "InvalidDropWindow",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidInitialization"
+    "name": "InvalidInitialization",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidNonce"
+    "name": "InvalidNonce",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidProbabilities"
+    "name": "InvalidProbabilities",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidRandomnessResponse"
+    "name": "InvalidRandomnessResponse",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidSignature"
+    "name": "InvalidSignature",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "InvalidTokenId"
+    "name": "InvalidTokenId",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "MetaTransactionFailed"
+    "name": "MetaTransactionFailed",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "NotInitializing"
+    "name": "NotInitializing",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
-        "name": "owner",
         "internalType": "address",
+        "name": "owner",
         "type": "address"
       }
     ],
-    "name": "OwnableInvalidOwner"
+    "name": "OwnableInvalidOwner",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [
       {
+        "internalType": "address",
         "name": "account",
-        "internalType": "address",
         "type": "address"
       }
     ],
-    "name": "OwnableUnauthorizedAccount"
+    "name": "OwnableUnauthorizedAccount",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "ReservedTokenId"
+    "name": "ReservedTokenId",
+    "type": "error"
   },
   {
-    "type": "error",
     "inputs": [],
-    "name": "SoldOut"
+    "name": "SoldOut",
+    "type": "error"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "account",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "operator",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
-        "name": "approved",
+        "indexed": false,
         "internalType": "bool",
-        "type": "bool",
-        "indexed": false
+        "name": "approved",
+        "type": "bool"
       }
     ],
-    "name": "ApprovalForAll"
+    "name": "ApprovalForAll",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "funder",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "recipient",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "quantity",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       },
       {
-        "name": "totalPrice",
+        "indexed": false,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "name": "totalPrice",
+        "type": "uint256"
       }
     ],
-    "name": "BundlePurchased"
+    "name": "BundlePurchased",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
-        "name": "quantity",
+        "indexed": false,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "name": "quantity",
+        "type": "uint256"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "price",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       },
       {
-        "name": "tokenIds",
+        "indexed": false,
         "internalType": "uint256[]",
-        "type": "uint256[]",
-        "indexed": false
+        "name": "tokenIds",
+        "type": "uint256[]"
       }
     ],
-    "name": "BundleSet"
+    "name": "BundleSet",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "usdc",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "revenueRecipient",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "randomnessProvider",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "uint64",
         "name": "startDate",
-        "internalType": "uint64",
-        "type": "uint64",
-        "indexed": false
+        "type": "uint64"
       },
       {
+        "indexed": false,
+        "internalType": "uint64",
         "name": "endDate",
-        "internalType": "uint64",
-        "type": "uint64",
-        "indexed": false
+        "type": "uint64"
       },
       {
-        "name": "numEditions",
+        "indexed": false,
         "internalType": "uint16",
-        "type": "uint16",
-        "indexed": false
+        "name": "numEditions",
+        "type": "uint16"
       },
       {
-        "name": "arweaveCID",
+        "indexed": false,
         "internalType": "bytes32",
-        "type": "bytes32",
-        "indexed": false
+        "name": "arweaveCID",
+        "type": "bytes32"
       }
     ],
-    "name": "DetailsSet"
+    "name": "DetailsSet",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "funder",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "recipient",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
-        "name": "tokenId",
+        "indexed": true,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "name": "tokenId",
+        "type": "uint256"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "quantity",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "totalPrice",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       }
     ],
-    "name": "EditionPurchased"
+    "name": "EditionPurchased",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "uint256",
         "name": "requestId",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "type": "uint256"
       },
       {
-        "name": "redeemer",
+        "indexed": true,
         "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "name": "redeemer",
+        "type": "address"
       },
       {
-        "name": "tokenId",
+        "indexed": true,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "name": "tokenId",
+        "type": "uint256"
       }
     ],
-    "name": "EditionRedeemed"
+    "name": "EditionRedeemed",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
-        "name": "tokenId",
+        "indexed": true,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "name": "tokenId",
+        "type": "uint256"
       },
       {
-        "name": "edition",
-        "internalType": "struct Edition",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint64",
             "name": "purchaseQuantity",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
+            "internalType": "uint64",
             "name": "purchasePrice",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
-            "name": "probability",
             "internalType": "uint16",
+            "name": "probability",
             "type": "uint16"
           },
           {
-            "name": "arweaveCID",
             "internalType": "bytes32",
+            "name": "arweaveCID",
             "type": "bytes32"
           }
         ],
-        "indexed": false
+        "indexed": false,
+        "internalType": "struct Edition",
+        "name": "edition",
+        "type": "tuple"
       }
     ],
-    "name": "EditionSet"
+    "name": "EditionSet",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
-        "name": "version",
+        "indexed": false,
         "internalType": "uint64",
-        "type": "uint64",
-        "indexed": false
+        "name": "version",
+        "type": "uint64"
       }
     ],
-    "name": "Initialized"
+    "name": "Initialized",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
         "name": "userAddress",
-        "internalType": "address",
-        "type": "address",
-        "indexed": false
+        "type": "address"
       },
       {
-        "name": "relayerAddress",
+        "indexed": false,
         "internalType": "address payable",
-        "type": "address",
-        "indexed": false
+        "name": "relayerAddress",
+        "type": "address"
       },
       {
-        "name": "functionSignature",
+        "indexed": false,
         "internalType": "bytes",
-        "type": "bytes",
-        "indexed": false
+        "name": "functionSignature",
+        "type": "bytes"
       }
     ],
-    "name": "MetaTransactionExecuted"
+    "name": "MetaTransactionExecuted",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "funder",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "recipient",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
-        "name": "quantity",
+        "indexed": false,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "name": "quantity",
+        "type": "uint256"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "totalPrice",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       }
     ],
-    "name": "MysteryBoxPurchased"
+    "name": "MysteryBoxPurchased",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
-        "name": "requestId",
+        "indexed": true,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "name": "requestId",
+        "type": "uint256"
       },
       {
-        "name": "recipient",
+        "indexed": true,
         "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "name": "recipient",
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "uint256",
         "name": "nonce",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "type": "uint256"
       }
     ],
-    "name": "MysteryBoxRevealRequested"
+    "name": "MysteryBoxRevealRequested",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "uint256",
         "name": "requestId",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "type": "uint256"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "recipient",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "uint256",
         "name": "randomness",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "type": "uint256"
       }
     ],
-    "name": "MysteryBoxRevealed"
+    "name": "MysteryBoxRevealed",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "quantity",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "price",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       },
       {
-        "name": "redemptions",
+        "indexed": false,
         "internalType": "uint8",
-        "type": "uint8",
-        "indexed": false
+        "name": "redemptions",
+        "type": "uint8"
       }
     ],
-    "name": "MysteryBoxSet"
+    "name": "MysteryBoxSet",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "newOwner",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       }
     ],
-    "name": "OwnershipTransferred"
+    "name": "OwnershipTransferred",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "operator",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "from",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "to",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "uint256[]",
         "name": "ids",
-        "internalType": "uint256[]",
-        "type": "uint256[]",
-        "indexed": false
+        "type": "uint256[]"
       },
       {
+        "indexed": false,
+        "internalType": "uint256[]",
         "name": "values",
-        "internalType": "uint256[]",
-        "type": "uint256[]",
-        "indexed": false
+        "type": "uint256[]"
       }
     ],
-    "name": "TransferBatch"
+    "name": "TransferBatch",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "operator",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "from",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
         "name": "to",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "id",
-        "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "type": "uint256"
       },
       {
-        "name": "value",
+        "indexed": false,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": false
+        "name": "value",
+        "type": "uint256"
       }
     ],
-    "name": "TransferSingle"
+    "name": "TransferSingle",
+    "type": "event"
   },
   {
-    "type": "event",
     "anonymous": false,
     "inputs": [
       {
-        "name": "value",
+        "indexed": false,
         "internalType": "string",
-        "type": "string",
-        "indexed": false
+        "name": "value",
+        "type": "string"
       },
       {
-        "name": "id",
+        "indexed": true,
         "internalType": "uint256",
-        "type": "uint256",
-        "indexed": true
+        "name": "id",
+        "type": "uint256"
       }
     ],
-    "name": "URI"
+    "name": "URI",
+    "type": "event"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "META_TRANSACTION_TYPEHASH",
     "outputs": [
       {
-        "name": "",
         "internalType": "bytes32",
+        "name": "",
         "type": "bytes32"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "account",
         "internalType": "address",
+        "name": "account",
         "type": "address"
       },
       {
-        "name": "id",
         "internalType": "uint256",
+        "name": "id",
         "type": "uint256"
       }
     ],
     "name": "balanceOf",
     "outputs": [
       {
-        "name": "",
         "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "accounts",
         "internalType": "address[]",
+        "name": "accounts",
         "type": "address[]"
       },
       {
-        "name": "ids",
         "internalType": "uint256[]",
+        "name": "ids",
         "type": "uint256[]"
       }
     ],
     "name": "balanceOfBatch",
     "outputs": [
       {
-        "name": "",
         "internalType": "uint256[]",
+        "name": "",
         "type": "uint256[]"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "payable",
-    "type": "function",
     "inputs": [
       {
-        "name": "user",
         "internalType": "address",
+        "name": "user",
         "type": "address"
       },
       {
-        "name": "functionSignature",
         "internalType": "bytes",
+        "name": "functionSignature",
         "type": "bytes"
       },
       {
+        "internalType": "bytes32",
         "name": "r",
-        "internalType": "bytes32",
         "type": "bytes32"
       },
       {
+        "internalType": "bytes32",
         "name": "s",
-        "internalType": "bytes32",
         "type": "bytes32"
       },
       {
-        "name": "v",
         "internalType": "uint8",
+        "name": "v",
         "type": "uint8"
       }
     ],
     "name": "executeMetaTransaction",
     "outputs": [
       {
-        "name": "",
         "internalType": "bytes",
+        "name": "",
         "type": "bytes"
       }
-    ]
+    ],
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "requestId_",
         "internalType": "uint256",
+        "name": "requestId_",
         "type": "uint256"
       },
       {
-        "name": "randomness_",
         "internalType": "uint256",
+        "name": "randomness_",
         "type": "uint256"
       }
     ],
     "name": "fulfillRandomness",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getArweaveCID",
     "outputs": [
       {
-        "name": "",
         "internalType": "string",
+        "name": "",
         "type": "string"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getBundle",
     "outputs": [
       {
-        "name": "bundle",
-        "internalType": "struct Bundle",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint256",
             "name": "quantity",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
             "name": "price",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
-            "name": "tokenIds",
             "internalType": "uint256[]",
+            "name": "tokenIds",
             "type": "uint256[]"
           }
-        ]
+        ],
+        "internalType": "struct Bundle",
+        "name": "bundle",
+        "type": "tuple"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getDomainSeparator",
     "outputs": [
       {
-        "name": "",
         "internalType": "bytes32",
+        "name": "",
         "type": "bytes32"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getDropWindow",
     "outputs": [
       {
-        "name": "startDate",
         "internalType": "uint256",
+        "name": "startDate",
         "type": "uint256"
       },
       {
-        "name": "endDate",
         "internalType": "uint256",
+        "name": "endDate",
         "type": "uint256"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "tokenId_",
         "internalType": "uint256",
+        "name": "tokenId_",
         "type": "uint256"
       }
     ],
     "name": "getEdition",
     "outputs": [
       {
-        "name": "",
-        "internalType": "struct Edition",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint64",
             "name": "purchaseQuantity",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
+            "internalType": "uint64",
             "name": "purchasePrice",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
-            "name": "probability",
             "internalType": "uint16",
+            "name": "probability",
             "type": "uint16"
           },
           {
-            "name": "arweaveCID",
             "internalType": "bytes32",
+            "name": "arweaveCID",
             "type": "bytes32"
           }
-        ]
+        ],
+        "internalType": "struct Edition",
+        "name": "",
+        "type": "tuple"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getEditions",
     "outputs": [
       {
-        "name": "editions",
-        "internalType": "struct Edition[]",
-        "type": "tuple[]",
         "components": [
           {
+            "internalType": "uint64",
             "name": "purchaseQuantity",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
+            "internalType": "uint64",
             "name": "purchasePrice",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
-            "name": "probability",
             "internalType": "uint16",
+            "name": "probability",
             "type": "uint16"
           },
           {
-            "name": "arweaveCID",
             "internalType": "bytes32",
+            "name": "arweaveCID",
             "type": "bytes32"
           }
-        ]
+        ],
+        "internalType": "struct Edition[]",
+        "name": "editions",
+        "type": "tuple[]"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getMysteryBox",
     "outputs": [
       {
-        "name": "",
-        "internalType": "struct MysteryBox",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint256",
             "name": "quantity",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
             "name": "price",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
-            "name": "redemptions",
             "internalType": "uint8",
+            "name": "redemptions",
             "type": "uint8"
           }
-        ]
+        ],
+        "internalType": "struct MysteryBox",
+        "name": "",
+        "type": "tuple"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "user_",
         "internalType": "address",
+        "name": "user_",
         "type": "address"
       }
     ],
     "name": "getNonce",
     "outputs": [
       {
-        "name": "",
         "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getRandomnessProvider",
     "outputs": [
       {
-        "name": "",
         "internalType": "address",
+        "name": "",
         "type": "address"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "requestId",
         "internalType": "uint256",
+        "name": "requestId",
         "type": "uint256"
       }
     ],
     "name": "getRandomnessRequest",
     "outputs": [
       {
-        "name": "request",
-        "internalType": "struct RandomnessRequest",
-        "type": "tuple",
         "components": [
           {
-            "name": "recipient",
             "internalType": "address",
+            "name": "recipient",
             "type": "address"
           },
           {
-            "name": "nonce",
             "internalType": "uint256",
+            "name": "nonce",
             "type": "uint256"
           },
           {
-            "name": "status",
             "internalType": "enum RandomnessRequestStatus",
+            "name": "status",
             "type": "uint8"
           }
-        ]
+        ],
+        "internalType": "struct RandomnessRequest",
+        "name": "request",
+        "type": "tuple"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "user_",
         "internalType": "address",
+        "name": "user_",
         "type": "address"
       }
     ],
     "name": "getRedemptionNonce",
     "outputs": [
       {
-        "name": "",
         "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getRevenueRecipient",
     "outputs": [
       {
-        "name": "",
         "internalType": "address",
+        "name": "",
         "type": "address"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getTotalProbability",
     "outputs": [
       {
-        "name": "",
         "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "getUsdc",
     "outputs": [
       {
-        "name": "",
         "internalType": "address",
+        "name": "",
         "type": "address"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "to_",
         "internalType": "address",
+        "name": "to_",
         "type": "address"
       },
       {
-        "name": "tokenId_",
         "internalType": "uint256",
+        "name": "tokenId_",
         "type": "uint256"
       },
       {
-        "name": "quantity_",
         "internalType": "uint256",
+        "name": "quantity_",
         "type": "uint256"
       }
     ],
     "name": "gift",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "to_",
         "internalType": "address",
+        "name": "to_",
         "type": "address"
       },
       {
-        "name": "tokenIds_",
         "internalType": "uint256[]",
+        "name": "tokenIds_",
         "type": "uint256[]"
       },
       {
-        "name": "quantities_",
         "internalType": "uint256[]",
+        "name": "quantities_",
         "type": "uint256[]"
       }
     ],
     "name": "giftBatch",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "details_",
-        "internalType": "struct DropDetails",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint64",
             "name": "startDate",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
+            "internalType": "uint64",
             "name": "endDate",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
-            "name": "numEditions",
             "internalType": "uint16",
+            "name": "numEditions",
             "type": "uint16"
           },
           {
+            "internalType": "address",
             "name": "usdc",
-            "internalType": "address",
             "type": "address"
           },
           {
+            "internalType": "address",
             "name": "revenueRecipient",
-            "internalType": "address",
             "type": "address"
           },
           {
+            "internalType": "address",
             "name": "randomnessProvider",
-            "internalType": "address",
             "type": "address"
           },
           {
-            "name": "arweaveCID",
             "internalType": "bytes32",
+            "name": "arweaveCID",
             "type": "bytes32"
           }
-        ]
+        ],
+        "internalType": "struct DropDetails",
+        "name": "details_",
+        "type": "tuple"
       }
     ],
     "name": "initialize",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "account",
         "internalType": "address",
+        "name": "account",
         "type": "address"
       },
       {
-        "name": "operator",
         "internalType": "address",
+        "name": "operator",
         "type": "address"
       }
     ],
     "name": "isApprovedForAll",
     "outputs": [
       {
-        "name": "",
         "internalType": "bool",
+        "name": "",
         "type": "bool"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
     "name": "owner",
     "outputs": [
       {
-        "name": "",
         "internalType": "address",
+        "name": "",
         "type": "address"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "recipient_",
         "internalType": "address",
+        "name": "recipient_",
         "type": "address"
       },
       {
-        "name": "quantity_",
         "internalType": "uint256",
+        "name": "quantity_",
         "type": "uint256"
       }
     ],
     "name": "purchaseBundle",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "recipient_",
         "internalType": "address",
+        "name": "recipient_",
         "type": "address"
       },
       {
-        "name": "tokenId_",
         "internalType": "uint256",
+        "name": "tokenId_",
         "type": "uint256"
       },
       {
-        "name": "quantity_",
         "internalType": "uint64",
+        "name": "quantity_",
         "type": "uint64"
       }
     ],
     "name": "purchaseEdition",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "recipient_",
         "internalType": "address",
+        "name": "recipient_",
         "type": "address"
       },
       {
-        "name": "quantity_",
         "internalType": "uint256",
+        "name": "quantity_",
         "type": "uint256"
       }
     ],
     "name": "purchaseMysteryBox",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [],
     "name": "renounceOwnership",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "nonce_",
         "internalType": "uint256",
+        "name": "nonce_",
         "type": "uint256"
       }
     ],
     "name": "reveal",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
+        "internalType": "address",
         "name": "from",
-        "internalType": "address",
         "type": "address"
       },
       {
+        "internalType": "address",
         "name": "to",
-        "internalType": "address",
         "type": "address"
       },
       {
+        "internalType": "uint256[]",
         "name": "ids",
-        "internalType": "uint256[]",
         "type": "uint256[]"
       },
       {
+        "internalType": "uint256[]",
         "name": "values",
-        "internalType": "uint256[]",
         "type": "uint256[]"
       },
       {
-        "name": "data",
         "internalType": "bytes",
+        "name": "data",
         "type": "bytes"
       }
     ],
     "name": "safeBatchTransferFrom",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
+        "internalType": "address",
         "name": "from",
-        "internalType": "address",
         "type": "address"
       },
       {
+        "internalType": "address",
         "name": "to",
-        "internalType": "address",
         "type": "address"
       },
       {
+        "internalType": "uint256",
         "name": "id",
-        "internalType": "uint256",
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
         "name": "value",
-        "internalType": "uint256",
         "type": "uint256"
       },
       {
-        "name": "data",
         "internalType": "bytes",
+        "name": "data",
         "type": "bytes"
       }
     ],
     "name": "safeTransferFrom",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "operator",
         "internalType": "address",
+        "name": "operator",
         "type": "address"
       },
       {
-        "name": "approved",
         "internalType": "bool",
+        "name": "approved",
         "type": "bool"
       }
     ],
     "name": "setApprovalForAll",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "bundle_",
-        "internalType": "struct Bundle",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint256",
             "name": "quantity",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
             "name": "price",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
-            "name": "tokenIds",
             "internalType": "uint256[]",
+            "name": "tokenIds",
             "type": "uint256[]"
           }
-        ]
+        ],
+        "internalType": "struct Bundle",
+        "name": "bundle_",
+        "type": "tuple"
       }
     ],
     "name": "setBundle",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "details_",
-        "internalType": "struct DropDetails",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint64",
             "name": "startDate",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
+            "internalType": "uint64",
             "name": "endDate",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
-            "name": "numEditions",
             "internalType": "uint16",
+            "name": "numEditions",
             "type": "uint16"
           },
           {
+            "internalType": "address",
             "name": "usdc",
-            "internalType": "address",
             "type": "address"
           },
           {
+            "internalType": "address",
             "name": "revenueRecipient",
-            "internalType": "address",
             "type": "address"
           },
           {
+            "internalType": "address",
             "name": "randomnessProvider",
-            "internalType": "address",
             "type": "address"
           },
           {
-            "name": "arweaveCID",
             "internalType": "bytes32",
+            "name": "arweaveCID",
             "type": "bytes32"
           }
-        ]
+        ],
+        "internalType": "struct DropDetails",
+        "name": "details_",
+        "type": "tuple"
       }
     ],
     "name": "setDropDetails",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "tokenId_",
         "internalType": "uint256",
+        "name": "tokenId_",
         "type": "uint256"
       },
       {
-        "name": "edition_",
-        "internalType": "struct Edition",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint64",
             "name": "purchaseQuantity",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
+            "internalType": "uint64",
             "name": "purchasePrice",
-            "internalType": "uint64",
             "type": "uint64"
           },
           {
-            "name": "probability",
             "internalType": "uint16",
+            "name": "probability",
             "type": "uint16"
           },
           {
-            "name": "arweaveCID",
             "internalType": "bytes32",
+            "name": "arweaveCID",
             "type": "bytes32"
           }
-        ]
+        ],
+        "internalType": "struct Edition",
+        "name": "edition_",
+        "type": "tuple"
       }
     ],
     "name": "setEdition",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "mysteryBox_",
-        "internalType": "struct MysteryBox",
-        "type": "tuple",
         "components": [
           {
+            "internalType": "uint256",
             "name": "quantity",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
             "name": "price",
-            "internalType": "uint256",
             "type": "uint256"
           },
           {
-            "name": "redemptions",
             "internalType": "uint8",
+            "name": "redemptions",
             "type": "uint8"
           }
-        ]
+        ],
+        "internalType": "struct MysteryBox",
+        "name": "mysteryBox_",
+        "type": "tuple"
       }
     ],
     "name": "setMysteryBox",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "uri_",
         "internalType": "string",
+        "name": "uri_",
         "type": "string"
       }
     ],
     "name": "setURI",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "interfaceId",
         "internalType": "bytes4",
+        "name": "interfaceId",
         "type": "bytes4"
       }
     ],
     "name": "supportsInterface",
     "outputs": [
       {
-        "name": "",
         "internalType": "bool",
+        "name": "",
         "type": "bool"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "stateMutability": "nonpayable",
-    "type": "function",
     "inputs": [
       {
-        "name": "newOwner",
         "internalType": "address",
+        "name": "newOwner",
         "type": "address"
       }
     ],
     "name": "transferOwnership",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [
       {
-        "name": "tokenId",
         "internalType": "uint256",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
     "name": "uri",
     "outputs": [
       {
-        "name": "",
         "internalType": "string",
+        "name": "",
         "type": "string"
       }
-    ]
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
 ]

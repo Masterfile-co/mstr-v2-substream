@@ -64,6 +64,8 @@ message DropEvent {
 		uint64 start_date = 4;
 		uint64 end_date = 5;
 		uint64 num_editions = 6;
+		string arweave_hash = 7;
+		string arweave_cid = 8;
 	}
 
 	message EditionProbabilitySet {
@@ -90,8 +92,6 @@ message DropEvent {
 		string price = 2;
 		string quantity = 3;
 		uint64 probability = 4;
-		string arweave_hash = 5;
-		string arweave_cid = 6;
 	}
 
 	message MysteryBoxPurchased {

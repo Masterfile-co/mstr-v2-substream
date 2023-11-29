@@ -45,6 +45,8 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
             start_date: event.start_date.to_u64(),
             end_date: event.end_date.to_u64(),
             num_editions: event.num_editions.to_u64(),
+            arweave_hash: general_purpose::STANDARD.encode(&event.arweave_cid), // Encode as base64
+            arweave_cid: pretty_hex(&event.arweave_cid),
         }));
     }
     if let Some(event) = EditionPurchased::match_and_decode(log) {
@@ -73,8 +75,6 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
             price: event.edition.0.to_string(),
             quantity: event.edition.1.to_string(),
             probability: event.edition.2.to_u64(),
-            arweave_hash: general_purpose::STANDARD.encode(&event.edition.3), // Encode as base64
-            arweave_cid: pretty_hex(&event.edition.3),
         }));
     }
     if let Some(event) = MysteryBoxPurchased::match_and_decode(log) {
