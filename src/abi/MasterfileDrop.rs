@@ -1223,7 +1223,6 @@
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
-                    [u8; 32usize],
                 ),
                 String,
             > {
@@ -1236,7 +1235,6 @@
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
-                    [u8; 32usize],
                 ),
                 String,
             > {
@@ -1246,8 +1244,7 @@
                                 vec![
                                     ethabi::ParamType::Uint(64usize),
                                     ethabi::ParamType::Uint(64usize),
-                                    ethabi::ParamType::Uint(16usize),
-                                    ethabi::ParamType::FixedBytes(32usize)
+                                    ethabi::ParamType::Uint(16usize)
                                 ],
                             ),
                         ],
@@ -1288,15 +1285,6 @@
                                 .to_big_endian(v.as_mut_slice());
                             substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                         },
-                        {
-                            let mut result = [0u8; 32];
-                            let v = tuple_elements[3usize]
-                                .clone()
-                                .into_fixed_bytes()
-                                .expect(INTERNAL_ERR);
-                            result.copy_from_slice(&v);
-                            result
-                        },
                     )
                 })
             }
@@ -1314,7 +1302,6 @@
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
-                    [u8; 32usize],
                 ),
             > {
                 use substreams_ethereum::pb::eth::rpc;
@@ -1362,7 +1349,6 @@
                 substreams::scalar::BigInt,
                 substreams::scalar::BigInt,
                 substreams::scalar::BigInt,
-                [u8; 32usize],
             ),
         > for GetEdition {
             fn output(
@@ -1372,7 +1358,6 @@
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
-                    [u8; 32usize],
                 ),
                 String,
             > {
@@ -1403,7 +1388,6 @@
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
-                        [u8; 32usize],
                     ),
                 >,
                 String,
@@ -1418,7 +1402,6 @@
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
-                        [u8; 32usize],
                     ),
                 >,
                 String,
@@ -1431,8 +1414,7 @@
                                         vec![
                                             ethabi::ParamType::Uint(64usize),
                                             ethabi::ParamType::Uint(64usize),
-                                            ethabi::ParamType::Uint(16usize),
-                                            ethabi::ParamType::FixedBytes(32usize)
+                                            ethabi::ParamType::Uint(16usize)
                                         ],
                                     ),
                                 ),
@@ -1478,15 +1460,6 @@
                                         .to_big_endian(v.as_mut_slice());
                                     substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                                 },
-                                {
-                                    let mut result = [0u8; 32];
-                                    let v = tuple_elements[3usize]
-                                        .clone()
-                                        .into_fixed_bytes()
-                                        .expect(INTERNAL_ERR);
-                                    result.copy_from_slice(&v);
-                                    result
-                                },
                             )
                         })
                         .collect(),
@@ -1507,7 +1480,6 @@
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
-                        [u8; 32usize],
                     ),
                 >,
             > {
@@ -1557,7 +1529,6 @@
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
-                    [u8; 32usize],
                 ),
             >,
         > for GetEditions {
@@ -1569,7 +1540,6 @@
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
                         substreams::scalar::BigInt,
-                        [u8; 32usize],
                     ),
                 >,
                 String,
@@ -4183,11 +4153,10 @@
                 substreams::scalar::BigInt,
                 substreams::scalar::BigInt,
                 substreams::scalar::BigInt,
-                [u8; 32usize],
             ),
         }
         impl SetEdition {
-            const METHOD_ID: [u8; 4] = [182u8, 253u8, 27u8, 96u8];
+            const METHOD_ID: [u8; 4] = [150u8, 25u8, 215u8, 152u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -4202,8 +4171,7 @@
                                 vec![
                                     ethabi::ParamType::Uint(64usize),
                                     ethabi::ParamType::Uint(64usize),
-                                    ethabi::ParamType::Uint(16usize),
-                                    ethabi::ParamType::FixedBytes(32usize)
+                                    ethabi::ParamType::Uint(16usize)
                                 ],
                             ),
                         ],
@@ -4256,15 +4224,6 @@
                                     .to_big_endian(v.as_mut_slice());
                                 substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                             },
-                            {
-                                let mut result = [0u8; 32];
-                                let v = tuple_elements[3usize]
-                                    .clone()
-                                    .into_fixed_bytes()
-                                    .expect(INTERNAL_ERR);
-                                result.copy_from_slice(&v);
-                                result
-                            },
                         )
                     },
                 })
@@ -4303,8 +4262,7 @@
                                 bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
                                 (num_bigint::Sign::Minus, _) => {
                                 panic!("negative numbers are not supported") }, }
-                                .as_slice(),),), ethabi::Token::FixedBytes(self.edition.3
-                                .as_ref().to_vec())
+                                .as_slice(),),)
                             ],
                         ),
                     ],
@@ -5629,53 +5587,50 @@
         #[derive(Debug, Clone, PartialEq)]
         pub struct EditionSet {
             pub token_id: substreams::scalar::BigInt,
-            pub edition: (
-                substreams::scalar::BigInt,
-                substreams::scalar::BigInt,
-                substreams::scalar::BigInt,
-                [u8; 32usize],
-            ),
+            pub quantity: substreams::scalar::BigInt,
+            pub price: substreams::scalar::BigInt,
+            pub probability: substreams::scalar::BigInt,
         }
         impl EditionSet {
             const TOPIC_ID: [u8; 32] = [
-                189u8,
-                44u8,
-                12u8,
-                84u8,
-                211u8,
-                32u8,
-                108u8,
-                50u8,
-                230u8,
-                192u8,
-                205u8,
-                75u8,
-                210u8,
-                186u8,
-                78u8,
-                213u8,
-                126u8,
-                187u8,
-                78u8,
-                89u8,
-                236u8,
-                165u8,
-                191u8,
-                8u8,
-                130u8,
-                58u8,
-                247u8,
-                229u8,
+                249u8,
+                137u8,
+                80u8,
+                243u8,
+                121u8,
+                174u8,
+                208u8,
+                85u8,
                 215u8,
-                12u8,
-                48u8,
-                18u8,
+                40u8,
+                185u8,
+                54u8,
+                56u8,
+                188u8,
+                145u8,
+                62u8,
+                92u8,
+                138u8,
+                119u8,
+                151u8,
+                40u8,
+                42u8,
+                83u8,
+                254u8,
+                69u8,
+                219u8,
+                182u8,
+                72u8,
+                3u8,
+                129u8,
+                156u8,
+                191u8,
             ];
             pub fn match_log(log: &substreams_ethereum::pb::eth::v2::Log) -> bool {
                 if log.topics.len() != 2usize {
                     return false;
                 }
-                if log.data.len() != 128usize {
+                if log.data.len() != 96usize {
                     return false;
                 }
                 return log.topics.get(0).expect("bounds already checked").as_ref()
@@ -5686,14 +5641,9 @@
             ) -> Result<Self, String> {
                 let mut values = ethabi::decode(
                         &[
-                            ethabi::ParamType::Tuple(
-                                vec![
-                                    ethabi::ParamType::Uint(64usize),
-                                    ethabi::ParamType::Uint(64usize),
-                                    ethabi::ParamType::Uint(16usize),
-                                    ethabi::ParamType::FixedBytes(32usize)
-                                ],
-                            ),
+                            ethabi::ParamType::Uint(64usize),
+                            ethabi::ParamType::Uint(64usize),
+                            ethabi::ParamType::Uint(16usize),
                         ],
                         log.data.as_ref(),
                     )
@@ -5719,50 +5669,35 @@
                             .to_big_endian(v.as_mut_slice());
                         substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                     },
-                    edition: {
-                        let tuple_elements = values
+                    quantity: {
+                        let mut v = [0 as u8; 32];
+                        values
                             .pop()
                             .expect(INTERNAL_ERR)
-                            .into_tuple()
-                            .expect(INTERNAL_ERR);
-                        (
-                            {
-                                let mut v = [0 as u8; 32];
-                                tuple_elements[0usize]
-                                    .clone()
-                                    .into_uint()
-                                    .expect(INTERNAL_ERR)
-                                    .to_big_endian(v.as_mut_slice());
-                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
-                            },
-                            {
-                                let mut v = [0 as u8; 32];
-                                tuple_elements[1usize]
-                                    .clone()
-                                    .into_uint()
-                                    .expect(INTERNAL_ERR)
-                                    .to_big_endian(v.as_mut_slice());
-                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
-                            },
-                            {
-                                let mut v = [0 as u8; 32];
-                                tuple_elements[2usize]
-                                    .clone()
-                                    .into_uint()
-                                    .expect(INTERNAL_ERR)
-                                    .to_big_endian(v.as_mut_slice());
-                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
-                            },
-                            {
-                                let mut result = [0u8; 32];
-                                let v = tuple_elements[3usize]
-                                    .clone()
-                                    .into_fixed_bytes()
-                                    .expect(INTERNAL_ERR);
-                                result.copy_from_slice(&v);
-                                result
-                            },
-                        )
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
+                    price: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
+                    probability: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                     },
                 })
             }

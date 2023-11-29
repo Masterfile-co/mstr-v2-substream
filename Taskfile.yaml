@@ -31,3 +31,21 @@ tasks:
       - task: proto
       - task: build
       - task: pack
+  
+  run:
+    internal: true
+    cmds:
+      - task: proto
+      - task: build 
+      - substreams run -e {{.FIREHOSE_URL}} ./substreams.yaml map_events --start-block {{.START_BLOCK}} --stop-block {{.STOP_BLOCK}} -p map_registry="registry={{.REGISTRY_ADDRESS}}" -p map_events="registry_address={{.REGISTRY_ADDRESS}}&chain_id={{.CHAIN_ID}}"
+
+  run:dev:
+    internal: true
+    cmds:
+      - task: run
+        vars:
+          START_BLOCK: 42987350
+          STOP_BLOCK: 42987375
+          FIREHOSE_URL: mumbai.streamingfast.io:443
+          REGISTRY_ADDRESS: 0x8d764bea078d78a671c9efda3b2a7484f4376e02
+          CHAIN_ID: 80001

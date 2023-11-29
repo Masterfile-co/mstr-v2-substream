@@ -72,9 +72,9 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
     if let Some(event) = EditionSet::match_and_decode(log) {
         return Some(drop_event::Event::EditionSet(drop_event::EditionSet {
             token_id: event.token_id.to_u64(),
-            price: event.edition.0.to_string(),
-            quantity: event.edition.1.to_string(),
-            probability: event.edition.2.to_u64(),
+            price: event.price.to_string(),
+            quantity: event.quantity.to_string(),
+            probability: event.probability.to_u64(),
         }));
     }
     if let Some(event) = MysteryBoxPurchased::match_and_decode(log) {
