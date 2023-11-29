@@ -50,6 +50,10 @@ pub mod drop_event {
         pub end_date: u64,
         #[prost(uint64, tag="6")]
         pub num_editions: u64,
+        #[prost(string, tag="7")]
+        pub arweave_hash: ::prost::alloc::string::String,
+        #[prost(string, tag="8")]
+        pub arweave_cid: ::prost::alloc::string::String,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -94,10 +98,6 @@ pub mod drop_event {
         pub quantity: ::prost::alloc::string::String,
         #[prost(uint64, tag="4")]
         pub probability: u64,
-        #[prost(string, tag="5")]
-        pub arweave_hash: ::prost::alloc::string::String,
-        #[prost(string, tag="6")]
-        pub arweave_cid: ::prost::alloc::string::String,
     }
     #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
