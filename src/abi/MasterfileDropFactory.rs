@@ -190,9 +190,6 @@
             pub details: (
                 substreams::scalar::BigInt,
                 substreams::scalar::BigInt,
-                substreams::scalar::BigInt,
-                Vec<u8>,
-                Vec<u8>,
                 Vec<u8>,
                 [u8; 32usize],
             ),
@@ -201,7 +198,6 @@
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
                     substreams::scalar::BigInt,
-                    [u8; 32usize],
                 ),
             >,
             pub mystery_box: (
@@ -216,7 +212,7 @@
             ),
         }
         impl DeployDrop {
-            const METHOD_ID: [u8; 4] = [60u8, 180u8, 215u8, 38u8];
+            const METHOD_ID: [u8; 4] = [4u8, 148u8, 97u8, 253u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -231,8 +227,6 @@
                                 vec![
                                     ethabi::ParamType::Uint(64usize),
                                     ethabi::ParamType::Uint(64usize),
-                                    ethabi::ParamType::Uint(16usize),
-                                    ethabi::ParamType::Address, ethabi::ParamType::Address,
                                     ethabi::ParamType::Address,
                                     ethabi::ParamType::FixedBytes(32usize)
                                 ],
@@ -243,8 +237,7 @@
                                         vec![
                                             ethabi::ParamType::Uint(64usize),
                                             ethabi::ParamType::Uint(64usize),
-                                            ethabi::ParamType::Uint(16usize),
-                                            ethabi::ParamType::FixedBytes(32usize)
+                                            ethabi::ParamType::Uint(16usize)
                                         ],
                                     ),
                                 ),
@@ -304,28 +297,7 @@
                                     .to_big_endian(v.as_mut_slice());
                                 substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                             },
-                            {
-                                let mut v = [0 as u8; 32];
-                                tuple_elements[2usize]
-                                    .clone()
-                                    .into_uint()
-                                    .expect(INTERNAL_ERR)
-                                    .to_big_endian(v.as_mut_slice());
-                                substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
-                            },
-                            tuple_elements[3usize]
-                                .clone()
-                                .into_address()
-                                .expect(INTERNAL_ERR)
-                                .as_bytes()
-                                .to_vec(),
-                            tuple_elements[4usize]
-                                .clone()
-                                .into_address()
-                                .expect(INTERNAL_ERR)
-                                .as_bytes()
-                                .to_vec(),
-                            tuple_elements[5usize]
+                            tuple_elements[2usize]
                                 .clone()
                                 .into_address()
                                 .expect(INTERNAL_ERR)
@@ -333,7 +305,7 @@
                                 .to_vec(),
                             {
                                 let mut result = [0u8; 32];
-                                let v = tuple_elements[6usize]
+                                let v = tuple_elements[3usize]
                                     .clone()
                                     .into_fixed_bytes()
                                     .expect(INTERNAL_ERR);
@@ -377,15 +349,6 @@
                                         .expect(INTERNAL_ERR)
                                         .to_big_endian(v.as_mut_slice());
                                     substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
-                                },
-                                {
-                                    let mut result = [0u8; 32];
-                                    let v = tuple_elements[3usize]
-                                        .clone()
-                                        .into_fixed_bytes()
-                                        .expect(INTERNAL_ERR);
-                                    result.copy_from_slice(&v);
-                                    result
                                 },
                             )
                         })
@@ -487,18 +450,8 @@
                                 (num_bigint::Sign::Minus, _) => {
                                 panic!("negative numbers are not supported") }, }
                                 .as_slice(),),),
-                                ethabi::Token::Uint(ethabi::Uint::from_big_endian(match self
-                                .details.2.clone().to_bytes_be() { (num_bigint::Sign::Plus,
-                                bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
-                                (num_bigint::Sign::Minus, _) => {
-                                panic!("negative numbers are not supported") }, }
-                                .as_slice(),),),
                                 ethabi::Token::Address(ethabi::Address::from_slice(& self
-                                .details.3)),
-                                ethabi::Token::Address(ethabi::Address::from_slice(& self
-                                .details.4)),
-                                ethabi::Token::Address(ethabi::Address::from_slice(& self
-                                .details.5)), ethabi::Token::FixedBytes(self.details.6
+                                .details.2)), ethabi::Token::FixedBytes(self.details.3
                                 .as_ref().to_vec())
                             ],
                         ),
@@ -525,8 +478,7 @@
                                         bytes) => bytes, (num_bigint::Sign::NoSign, bytes) => bytes,
                                         (num_bigint::Sign::Minus, _) => {
                                         panic!("negative numbers are not supported") }, }
-                                        .as_slice(),),), ethabi::Token::FixedBytes(inner.3.as_ref()
-                                        .to_vec())
+                                        .as_slice(),),)
                                     ],
                                 ))
                                 .collect();
@@ -909,6 +861,69 @@
         }
         impl substreams_ethereum::Function for SetDrop {
             const NAME: &'static str = "setDrop";
+            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
+                Self::match_call(call)
+            }
+            fn decode(
+                call: &substreams_ethereum::pb::eth::v2::Call,
+            ) -> Result<Self, String> {
+                Self::decode(call)
+            }
+            fn encode(&self) -> Vec<u8> {
+                self.encode()
+            }
+        }
+        #[derive(Debug, Clone, PartialEq)]
+        pub struct SetRandomnessProvider {
+            pub randomness_provider: Vec<u8>,
+        }
+        impl SetRandomnessProvider {
+            const METHOD_ID: [u8; 4] = [177u8, 95u8, 188u8, 20u8];
+            pub fn decode(
+                call: &substreams_ethereum::pb::eth::v2::Call,
+            ) -> Result<Self, String> {
+                let maybe_data = call.input.get(4..);
+                if maybe_data.is_none() {
+                    return Err("no data to decode".to_string());
+                }
+                let mut values = ethabi::decode(
+                        &[ethabi::ParamType::Address],
+                        maybe_data.unwrap(),
+                    )
+                    .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
+                values.reverse();
+                Ok(Self {
+                    randomness_provider: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_address()
+                        .expect(INTERNAL_ERR)
+                        .as_bytes()
+                        .to_vec(),
+                })
+            }
+            pub fn encode(&self) -> Vec<u8> {
+                let data = ethabi::encode(
+                    &[
+                        ethabi::Token::Address(
+                            ethabi::Address::from_slice(&self.randomness_provider),
+                        ),
+                    ],
+                );
+                let mut encoded = Vec::with_capacity(4 + data.len());
+                encoded.extend(Self::METHOD_ID);
+                encoded.extend(data);
+                encoded
+            }
+            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
+                match call.input.get(0..4) {
+                    Some(signature) => Self::METHOD_ID == signature,
+                    None => false,
+                }
+            }
+        }
+        impl substreams_ethereum::Function for SetRandomnessProvider {
+            const NAME: &'static str = "setRandomnessProvider";
             fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 Self::match_call(call)
             }

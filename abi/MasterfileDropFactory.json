@@ -1,273 +1,271 @@
 [
   {
-    "stateMutability": "nonpayable",
     "type": "constructor",
     "inputs": [
       {
         "name": "dropImpl_",
-        "internalType": "contract MasterfileDrop",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract MasterfileDrop"
       },
       {
         "name": "registry_",
-        "internalType": "contract IRegistry",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract IRegistry"
       },
       {
         "name": "usdc_",
-        "internalType": "address",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "randomnessProvider_",
+        "type": "address",
+        "internalType": "address"
       },
       {
         "name": "version_",
-        "internalType": "uint256",
-        "type": "uint256"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "inputs": [],
-    "name": "ERC1167FailedCreateClone"
-  },
-  {
-    "type": "error",
-    "inputs": [],
-    "name": "Unauthorized"
-  },
-  {
-    "type": "event",
-    "anonymous": false,
-    "inputs": [
-      {
-        "name": "drop",
-        "internalType": "contract MasterfileDrop",
-        "type": "address",
-        "indexed": true
-      },
-      {
-        "name": "safe",
-        "internalType": "address",
-        "type": "address",
-        "indexed": true
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "name": "DropDeployed"
+    "stateMutability": "nonpayable"
   },
   {
-    "stateMutability": "view",
     "type": "function",
-    "inputs": [],
     "name": "FACTORY_TYPE",
-    "outputs": [
-      {
-        "name": "",
-        "internalType": "bytes32",
-        "type": "bytes32"
-      }
-    ]
-  },
-  {
-    "stateMutability": "view",
-    "type": "function",
     "inputs": [],
-    "name": "VERSION",
     "outputs": [
       {
         "name": "",
-        "internalType": "uint256",
-        "type": "uint256"
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
-    ]
+    ],
+    "stateMutability": "view"
   },
   {
-    "stateMutability": "nonpayable",
     "type": "function",
+    "name": "VERSION",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "deployDrop",
     "inputs": [
       {
         "name": "salt_",
-        "internalType": "bytes32",
-        "type": "bytes32"
+        "type": "bytes32",
+        "internalType": "bytes32"
       },
       {
         "name": "details_",
-        "internalType": "struct DropDetails",
         "type": "tuple",
+        "internalType": "struct DropDeploymentDetails",
         "components": [
           {
             "name": "startDate",
-            "internalType": "uint64",
-            "type": "uint64"
+            "type": "uint64",
+            "internalType": "uint64"
           },
           {
             "name": "endDate",
-            "internalType": "uint64",
-            "type": "uint64"
-          },
-          {
-            "name": "numEditions",
-            "internalType": "uint16",
-            "type": "uint16"
-          },
-          {
-            "name": "usdc",
-            "internalType": "address",
-            "type": "address"
+            "type": "uint64",
+            "internalType": "uint64"
           },
           {
             "name": "revenueRecipient",
-            "internalType": "address",
-            "type": "address"
-          },
-          {
-            "name": "randomnessProvider",
-            "internalType": "address",
-            "type": "address"
+            "type": "address",
+            "internalType": "address"
           },
           {
             "name": "arweaveCID",
-            "internalType": "bytes32",
-            "type": "bytes32"
+            "type": "bytes32",
+            "internalType": "bytes32"
           }
         ]
       },
       {
         "name": "editions_",
-        "internalType": "struct Edition[]",
         "type": "tuple[]",
+        "internalType": "struct Edition[]",
         "components": [
           {
-            "name": "purchaseQuantity",
-            "internalType": "uint64",
-            "type": "uint64"
+            "name": "quantity",
+            "type": "uint64",
+            "internalType": "uint64"
           },
           {
-            "name": "purchasePrice",
-            "internalType": "uint64",
-            "type": "uint64"
+            "name": "price",
+            "type": "uint64",
+            "internalType": "uint64"
           },
           {
             "name": "probability",
-            "internalType": "uint16",
-            "type": "uint16"
-          },
-          {
-            "name": "arweaveCID",
-            "internalType": "bytes32",
-            "type": "bytes32"
+            "type": "uint16",
+            "internalType": "uint16"
           }
         ]
       },
       {
         "name": "mysteryBox_",
-        "internalType": "struct MysteryBox",
         "type": "tuple",
+        "internalType": "struct MysteryBox",
         "components": [
           {
             "name": "quantity",
-            "internalType": "uint256",
-            "type": "uint256"
+            "type": "uint256",
+            "internalType": "uint256"
           },
           {
             "name": "price",
-            "internalType": "uint256",
-            "type": "uint256"
+            "type": "uint256",
+            "internalType": "uint256"
           },
           {
             "name": "redemptions",
-            "internalType": "uint8",
-            "type": "uint8"
+            "type": "uint8",
+            "internalType": "uint8"
           }
         ]
       },
       {
         "name": "bundle_",
-        "internalType": "struct Bundle",
         "type": "tuple",
+        "internalType": "struct Bundle",
         "components": [
           {
             "name": "quantity",
-            "internalType": "uint256",
-            "type": "uint256"
+            "type": "uint256",
+            "internalType": "uint256"
           },
           {
             "name": "price",
-            "internalType": "uint256",
-            "type": "uint256"
+            "type": "uint256",
+            "internalType": "uint256"
           },
           {
             "name": "tokenIds",
-            "internalType": "uint256[]",
-            "type": "uint256[]"
+            "type": "uint256[]",
+            "internalType": "uint256[]"
           }
         ]
       }
     ],
-    "name": "deployDrop",
     "outputs": [
       {
         "name": "drop",
-        "internalType": "contract MasterfileDrop",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract MasterfileDrop"
       }
-    ]
+    ],
+    "stateMutability": "nonpayable"
   },
   {
-    "stateMutability": "view",
     "type": "function",
+    "name": "predictDropAddress",
     "inputs": [
       {
         "name": "salt_",
-        "internalType": "bytes32",
-        "type": "bytes32"
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
-    "name": "predictDropAddress",
     "outputs": [
       {
         "name": "drop",
-        "internalType": "address",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
-    ]
+    ],
+    "stateMutability": "view"
   },
   {
-    "stateMutability": "view",
     "type": "function",
-    "inputs": [],
     "name": "registry",
+    "inputs": [],
     "outputs": [
       {
         "name": "",
-        "internalType": "contract IRegistry",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract IRegistry"
       }
-    ]
+    ],
+    "stateMutability": "view"
   },
   {
-    "stateMutability": "nonpayable",
     "type": "function",
+    "name": "setDrop",
     "inputs": [
       {
         "name": "drop_",
-        "internalType": "contract MasterfileDrop",
-        "type": "address"
+        "type": "address",
+        "internalType": "contract MasterfileDrop"
       }
     ],
-    "name": "setDrop",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
-    "stateMutability": "nonpayable",
     "type": "function",
+    "name": "setRandomnessProvider",
+    "inputs": [
+      {
+        "name": "randomnessProvider_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setUsdc",
     "inputs": [
       {
         "name": "usdc_",
-        "internalType": "address",
-        "type": "address"
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "name": "setUsdc",
-    "outputs": []
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "DropDeployed",
+    "inputs": [
+      {
+        "name": "drop",
+        "type": "address",
+        "indexed": true,
+        "internalType": "contract MasterfileDrop"
+      },
+      {
+        "name": "safe",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "ERC1167FailedCreateClone",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "Unauthorized",
+    "inputs": []
   }
 ]
