@@ -1969,24 +1969,18 @@
             }
             pub fn output_call(
                 call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<
-                (Vec<u8>, substreams::scalar::BigInt, substreams::scalar::BigInt),
-                String,
-            > {
+            ) -> Result<(Vec<u8>, [u8; 32usize], substreams::scalar::BigInt), String> {
                 Self::output(call.return_data.as_ref())
             }
             pub fn output(
                 data: &[u8],
-            ) -> Result<
-                (Vec<u8>, substreams::scalar::BigInt, substreams::scalar::BigInt),
-                String,
-            > {
+            ) -> Result<(Vec<u8>, [u8; 32usize], substreams::scalar::BigInt), String> {
                 let mut values = ethabi::decode(
                         &[
                             ethabi::ParamType::Tuple(
                                 vec![
                                     ethabi::ParamType::Address,
-                                    ethabi::ParamType::Uint(256usize),
+                                    ethabi::ParamType::FixedBytes(32usize),
                                     ethabi::ParamType::Uint(8usize)
                                 ],
                             ),
@@ -2008,13 +2002,13 @@
                             .as_bytes()
                             .to_vec(),
                         {
-                            let mut v = [0 as u8; 32];
-                            tuple_elements[1usize]
+                            let mut result = [0u8; 32];
+                            let v = tuple_elements[1usize]
                                 .clone()
-                                .into_uint()
-                                .expect(INTERNAL_ERR)
-                                .to_big_endian(v.as_mut_slice());
-                            substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                                .into_fixed_bytes()
+                                .expect(INTERNAL_ERR);
+                            result.copy_from_slice(&v);
+                            result
                         },
                         {
                             let mut v = [0 as u8; 32];
@@ -2037,9 +2031,7 @@
             pub fn call(
                 &self,
                 address: Vec<u8>,
-            ) -> Option<
-                (Vec<u8>, substreams::scalar::BigInt, substreams::scalar::BigInt),
-            > {
+            ) -> Option<(Vec<u8>, [u8; 32usize], substreams::scalar::BigInt)> {
                 use substreams_ethereum::pb::eth::rpc;
                 let rpc_calls = rpc::RpcCalls {
                     calls: vec![
@@ -2081,23 +2073,21 @@
             }
         }
         impl substreams_ethereum::rpc::RPCDecodable<
-            (Vec<u8>, substreams::scalar::BigInt, substreams::scalar::BigInt),
+            (Vec<u8>, [u8; 32usize], substreams::scalar::BigInt),
         > for GetRandomnessRequest {
             fn output(
                 data: &[u8],
-            ) -> Result<
-                (Vec<u8>, substreams::scalar::BigInt, substreams::scalar::BigInt),
-                String,
-            > {
+            ) -> Result<(Vec<u8>, [u8; 32usize], substreams::scalar::BigInt), String> {
                 Self::output(data)
             }
         }
         #[derive(Debug, Clone, PartialEq)]
-        pub struct GetRedemptionNonce {
+        pub struct GetRedemptionNonceStatus {
             pub user: Vec<u8>,
+            pub nonce: [u8; 32usize],
         }
-        impl GetRedemptionNonce {
-            const METHOD_ID: [u8; 4] = [69u8, 139u8, 6u8, 163u8];
+        impl GetRedemptionNonceStatus {
+            const METHOD_ID: [u8; 4] = [58u8, 234u8, 205u8, 64u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -2106,7 +2096,10 @@
                     return Err("no data to decode".to_string());
                 }
                 let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Address],
+                        &[
+                            ethabi::ParamType::Address,
+                            ethabi::ParamType::FixedBytes(32usize),
+                        ],
                         maybe_data.unwrap(),
                     )
                     .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
@@ -2119,11 +2112,24 @@
                         .expect(INTERNAL_ERR)
                         .as_bytes()
                         .to_vec(),
+                    nonce: {
+                        let mut result = [0u8; 32];
+                        let v = values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_fixed_bytes()
+                            .expect(INTERNAL_ERR);
+                        result.copy_from_slice(&v);
+                        result
+                    },
                 })
             }
             pub fn encode(&self) -> Vec<u8> {
                 let data = ethabi::encode(
-                    &[ethabi::Token::Address(ethabi::Address::from_slice(&self.user))],
+                    &[
+                        ethabi::Token::Address(ethabi::Address::from_slice(&self.user)),
+                        ethabi::Token::FixedBytes(self.nonce.as_ref().to_vec()),
+                    ],
                 );
                 let mut encoded = Vec::with_capacity(4 + data.len());
                 encoded.extend(Self::METHOD_ID);
@@ -2132,25 +2138,22 @@
             }
             pub fn output_call(
                 call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<substreams::scalar::BigInt, String> {
+            ) -> Result<bool, String> {
                 Self::output(call.return_data.as_ref())
             }
-            pub fn output(data: &[u8]) -> Result<substreams::scalar::BigInt, String> {
+            pub fn output(data: &[u8]) -> Result<bool, String> {
                 let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Uint(256usize)],
+                        &[ethabi::ParamType::Bool],
                         data.as_ref(),
                     )
                     .map_err(|e| format!("unable to decode output data: {:?}", e))?;
-                Ok({
-                    let mut v = [0 as u8; 32];
+                Ok(
                     values
                         .pop()
                         .expect("one output data should have existed")
-                        .into_uint()
-                        .expect(INTERNAL_ERR)
-                        .to_big_endian(v.as_mut_slice());
-                    substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
-                })
+                        .into_bool()
+                        .expect(INTERNAL_ERR),
+                )
             }
             pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 match call.input.get(0..4) {
@@ -2158,7 +2161,7 @@
                     None => false,
                 }
             }
-            pub fn call(&self, address: Vec<u8>) -> Option<substreams::scalar::BigInt> {
+            pub fn call(&self, address: Vec<u8>) -> Option<bool> {
                 use substreams_ethereum::pb::eth::rpc;
                 let rpc_calls = rpc::RpcCalls {
                     calls: vec![
@@ -2185,8 +2188,8 @@
                 }
             }
         }
-        impl substreams_ethereum::Function for GetRedemptionNonce {
-            const NAME: &'static str = "getRedemptionNonce";
+        impl substreams_ethereum::Function for GetRedemptionNonceStatus {
+            const NAME: &'static str = "getRedemptionNonceStatus";
             fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 Self::match_call(call)
             }
@@ -2199,9 +2202,8 @@
                 self.encode()
             }
         }
-        impl substreams_ethereum::rpc::RPCDecodable<substreams::scalar::BigInt>
-        for GetRedemptionNonce {
-            fn output(data: &[u8]) -> Result<substreams::scalar::BigInt, String> {
+        impl substreams_ethereum::rpc::RPCDecodable<bool> for GetRedemptionNonceStatus {
+            fn output(data: &[u8]) -> Result<bool, String> {
                 Self::output(data)
             }
         }
@@ -3104,10 +3106,12 @@
         #[derive(Debug, Clone, PartialEq)]
         pub struct PurchaseBundle {
             pub recipient: Vec<u8>,
+            pub funder: Vec<u8>,
             pub quantity: substreams::scalar::BigInt,
+            pub shipping_cost: substreams::scalar::BigInt,
         }
         impl PurchaseBundle {
-            const METHOD_ID: [u8; 4] = [44u8, 59u8, 51u8, 157u8];
+            const METHOD_ID: [u8; 4] = [160u8, 14u8, 182u8, 39u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -3116,7 +3120,12 @@
                     return Err("no data to decode".to_string());
                 }
                 let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Address, ethabi::ParamType::Uint(256usize)],
+                        &[
+                            ethabi::ParamType::Address,
+                            ethabi::ParamType::Address,
+                            ethabi::ParamType::Uint(256usize),
+                            ethabi::ParamType::Uint(256usize),
+                        ],
                         maybe_data.unwrap(),
                     )
                     .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
@@ -3129,7 +3138,24 @@
                         .expect(INTERNAL_ERR)
                         .as_bytes()
                         .to_vec(),
+                    funder: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_address()
+                        .expect(INTERNAL_ERR)
+                        .as_bytes()
+                        .to_vec(),
                     quantity: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
+                    shipping_cost: {
                         let mut v = [0 as u8; 32];
                         values
                             .pop()
@@ -3147,9 +3173,24 @@
                         ethabi::Token::Address(
                             ethabi::Address::from_slice(&self.recipient),
                         ),
+                        ethabi::Token::Address(
+                            ethabi::Address::from_slice(&self.funder),
+                        ),
                         ethabi::Token::Uint(
                             ethabi::Uint::from_big_endian(
                                 match self.quantity.clone().to_bytes_be() {
+                                    (num_bigint::Sign::Plus, bytes) => bytes,
+                                    (num_bigint::Sign::NoSign, bytes) => bytes,
+                                    (num_bigint::Sign::Minus, _) => {
+                                        panic!("negative numbers are not supported")
+                                    }
+                                }
+                                    .as_slice(),
+                            ),
+                        ),
+                        ethabi::Token::Uint(
+                            ethabi::Uint::from_big_endian(
+                                match self.shipping_cost.clone().to_bytes_be() {
                                     (num_bigint::Sign::Plus, bytes) => bytes,
                                     (num_bigint::Sign::NoSign, bytes) => bytes,
                                     (num_bigint::Sign::Minus, _) => {
@@ -3190,11 +3231,13 @@
         #[derive(Debug, Clone, PartialEq)]
         pub struct PurchaseEdition {
             pub recipient: Vec<u8>,
+            pub funder: Vec<u8>,
             pub token_id: substreams::scalar::BigInt,
             pub quantity: substreams::scalar::BigInt,
+            pub shipping_cost: substreams::scalar::BigInt,
         }
         impl PurchaseEdition {
-            const METHOD_ID: [u8; 4] = [53u8, 77u8, 27u8, 241u8];
+            const METHOD_ID: [u8; 4] = [175u8, 253u8, 1u8, 119u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -3205,8 +3248,10 @@
                 let mut values = ethabi::decode(
                         &[
                             ethabi::ParamType::Address,
+                            ethabi::ParamType::Address,
                             ethabi::ParamType::Uint(256usize),
                             ethabi::ParamType::Uint(64usize),
+                            ethabi::ParamType::Uint(256usize),
                         ],
                         maybe_data.unwrap(),
                     )
@@ -3214,6 +3259,13 @@
                 values.reverse();
                 Ok(Self {
                     recipient: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_address()
+                        .expect(INTERNAL_ERR)
+                        .as_bytes()
+                        .to_vec(),
+                    funder: values
                         .pop()
                         .expect(INTERNAL_ERR)
                         .into_address()
@@ -3240,6 +3292,16 @@
                             .to_big_endian(v.as_mut_slice());
                         substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
                     },
+                    shipping_cost: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
                 })
             }
             pub fn encode(&self) -> Vec<u8> {
@@ -3247,6 +3309,9 @@
                     &[
                         ethabi::Token::Address(
                             ethabi::Address::from_slice(&self.recipient),
+                        ),
+                        ethabi::Token::Address(
+                            ethabi::Address::from_slice(&self.funder),
                         ),
                         ethabi::Token::Uint(
                             ethabi::Uint::from_big_endian(
@@ -3263,6 +3328,18 @@
                         ethabi::Token::Uint(
                             ethabi::Uint::from_big_endian(
                                 match self.quantity.clone().to_bytes_be() {
+                                    (num_bigint::Sign::Plus, bytes) => bytes,
+                                    (num_bigint::Sign::NoSign, bytes) => bytes,
+                                    (num_bigint::Sign::Minus, _) => {
+                                        panic!("negative numbers are not supported")
+                                    }
+                                }
+                                    .as_slice(),
+                            ),
+                        ),
+                        ethabi::Token::Uint(
+                            ethabi::Uint::from_big_endian(
+                                match self.shipping_cost.clone().to_bytes_be() {
                                     (num_bigint::Sign::Plus, bytes) => bytes,
                                     (num_bigint::Sign::NoSign, bytes) => bytes,
                                     (num_bigint::Sign::Minus, _) => {
@@ -3303,10 +3380,12 @@
         #[derive(Debug, Clone, PartialEq)]
         pub struct PurchaseMysteryBox {
             pub recipient: Vec<u8>,
+            pub funder: Vec<u8>,
             pub quantity: substreams::scalar::BigInt,
+            pub shipping_cost: substreams::scalar::BigInt,
         }
         impl PurchaseMysteryBox {
-            const METHOD_ID: [u8; 4] = [215u8, 48u8, 172u8, 19u8];
+            const METHOD_ID: [u8; 4] = [23u8, 123u8, 217u8, 111u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -3315,7 +3394,12 @@
                     return Err("no data to decode".to_string());
                 }
                 let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Address, ethabi::ParamType::Uint(256usize)],
+                        &[
+                            ethabi::ParamType::Address,
+                            ethabi::ParamType::Address,
+                            ethabi::ParamType::Uint(256usize),
+                            ethabi::ParamType::Uint(256usize),
+                        ],
                         maybe_data.unwrap(),
                     )
                     .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
@@ -3328,7 +3412,24 @@
                         .expect(INTERNAL_ERR)
                         .as_bytes()
                         .to_vec(),
+                    funder: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_address()
+                        .expect(INTERNAL_ERR)
+                        .as_bytes()
+                        .to_vec(),
                     quantity: {
+                        let mut v = [0 as u8; 32];
+                        values
+                            .pop()
+                            .expect(INTERNAL_ERR)
+                            .into_uint()
+                            .expect(INTERNAL_ERR)
+                            .to_big_endian(v.as_mut_slice());
+                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                    },
+                    shipping_cost: {
                         let mut v = [0 as u8; 32];
                         values
                             .pop()
@@ -3346,9 +3447,24 @@
                         ethabi::Token::Address(
                             ethabi::Address::from_slice(&self.recipient),
                         ),
+                        ethabi::Token::Address(
+                            ethabi::Address::from_slice(&self.funder),
+                        ),
                         ethabi::Token::Uint(
                             ethabi::Uint::from_big_endian(
                                 match self.quantity.clone().to_bytes_be() {
+                                    (num_bigint::Sign::Plus, bytes) => bytes,
+                                    (num_bigint::Sign::NoSign, bytes) => bytes,
+                                    (num_bigint::Sign::Minus, _) => {
+                                        panic!("negative numbers are not supported")
+                                    }
+                                }
+                                    .as_slice(),
+                            ),
+                        ),
+                        ethabi::Token::Uint(
+                            ethabi::Uint::from_big_endian(
+                                match self.shipping_cost.clone().to_bytes_be() {
                                     (num_bigint::Sign::Plus, bytes) => bytes,
                                     (num_bigint::Sign::NoSign, bytes) => bytes,
                                     (num_bigint::Sign::Minus, _) => {
@@ -3425,10 +3541,10 @@
         }
         #[derive(Debug, Clone, PartialEq)]
         pub struct Reveal {
-            pub nonce: substreams::scalar::BigInt,
+            pub nonce: [u8; 32usize],
         }
         impl Reveal {
-            const METHOD_ID: [u8; 4] = [194u8, 202u8, 10u8, 197u8];
+            const METHOD_ID: [u8; 4] = [112u8, 31u8, 208u8, 241u8];
             pub fn decode(
                 call: &substreams_ethereum::pb::eth::v2::Call,
             ) -> Result<Self, String> {
@@ -3437,40 +3553,27 @@
                     return Err("no data to decode".to_string());
                 }
                 let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Uint(256usize)],
+                        &[ethabi::ParamType::FixedBytes(32usize)],
                         maybe_data.unwrap(),
                     )
                     .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
                 values.reverse();
                 Ok(Self {
                     nonce: {
-                        let mut v = [0 as u8; 32];
-                        values
+                        let mut result = [0u8; 32];
+                        let v = values
                             .pop()
                             .expect(INTERNAL_ERR)
-                            .into_uint()
-                            .expect(INTERNAL_ERR)
-                            .to_big_endian(v.as_mut_slice());
-                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            .into_fixed_bytes()
+                            .expect(INTERNAL_ERR);
+                        result.copy_from_slice(&v);
+                        result
                     },
                 })
             }
             pub fn encode(&self) -> Vec<u8> {
                 let data = ethabi::encode(
-                    &[
-                        ethabi::Token::Uint(
-                            ethabi::Uint::from_big_endian(
-                                match self.nonce.clone().to_bytes_be() {
-                                    (num_bigint::Sign::Plus, bytes) => bytes,
-                                    (num_bigint::Sign::NoSign, bytes) => bytes,
-                                    (num_bigint::Sign::Minus, _) => {
-                                        panic!("negative numbers are not supported")
-                                    }
-                                }
-                                    .as_slice(),
-                            ),
-                        ),
-                    ],
+                    &[ethabi::Token::FixedBytes(self.nonce.as_ref().to_vec())],
                 );
                 let mut encoded = Vec::with_capacity(4 + data.len());
                 encoded.extend(Self::METHOD_ID);
@@ -6029,42 +6132,42 @@
         pub struct MysteryBoxRevealRequested {
             pub request_id: substreams::scalar::BigInt,
             pub recipient: Vec<u8>,
-            pub nonce: substreams::scalar::BigInt,
+            pub nonce: [u8; 32usize],
         }
         impl MysteryBoxRevealRequested {
             const TOPIC_ID: [u8; 32] = [
-                107u8,
-                178u8,
-                78u8,
-                13u8,
-                143u8,
-                148u8,
-                111u8,
-                220u8,
-                5u8,
-                156u8,
-                230u8,
-                146u8,
+                31u8,
+                176u8,
+                87u8,
+                159u8,
+                196u8,
+                58u8,
+                162u8,
+                34u8,
+                42u8,
+                125u8,
+                144u8,
+                87u8,
+                208u8,
                 158u8,
-                136u8,
-                175u8,
-                222u8,
-                227u8,
+                53u8,
+                68u8,
+                116u8,
+                131u8,
                 127u8,
-                192u8,
-                184u8,
-                84u8,
-                63u8,
-                29u8,
-                157u8,
-                135u8,
+                30u8,
+                74u8,
+                139u8,
+                208u8,
                 216u8,
-                70u8,
-                120u8,
-                61u8,
-                148u8,
-                182u8,
-                46u8,
+                254u8,
+                189u8,
+                49u8,
+                77u8,
+                135u8,
+                206u8,
+                231u8,
+                108u8,
             ];
             pub fn match_log(log: &substreams_ethereum::pb::eth::v2::Log) -> bool {
                 if log.topics.len() != 4usize {
@@ -6116,23 +6219,23 @@
                         .as_bytes()
                         .to_vec(),
                     nonce: {
-                        let mut v = [0 as u8; 32];
-                        ethabi::decode(
-                                &[ethabi::ParamType::Uint(256usize)],
+                        let mut result = [0u8; 32];
+                        let v = ethabi::decode(
+                                &[ethabi::ParamType::FixedBytes(32usize)],
                                 log.topics[3usize].as_ref(),
                             )
                             .map_err(|e| {
                                 format!(
-                                    "unable to decode param 'nonce' from topic of type 'uint256': {:?}",
+                                    "unable to decode param 'nonce' from topic of type 'bytes32': {:?}",
                                     e
                                 )
                             })?
                             .pop()
                             .expect(INTERNAL_ERR)
-                            .into_uint()
-                            .expect(INTERNAL_ERR)
-                            .to_big_endian(v.as_mut_slice());
-                        substreams::scalar::BigInt::from_unsigned_bytes_be(&v)
+                            .into_fixed_bytes()
+                            .expect(INTERNAL_ERR);
+                        result.copy_from_slice(&v);
+                        result
                     },
                 })
             }

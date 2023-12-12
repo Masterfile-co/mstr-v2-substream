@@ -92,7 +92,7 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
             drop_event::MysteryBoxRevealRequested {
                 request_id: event.request_id.to_string(),
                 recipient: pretty_hex(&event.recipient),
-                nonce: event.nonce.to_string(),
+                nonce: pretty_hex(&event.nonce),
             },
         ));
     }
