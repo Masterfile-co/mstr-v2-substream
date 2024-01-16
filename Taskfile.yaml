@@ -3,16 +3,6 @@
 version: "3"
 
 tasks:
-  prepare:
-    cmds:
-      - npx -y mustache config/{{.ENV}}.json substreams.template.yaml > substreams.yaml
-
-  prepare:dev:
-    cmds:
-      - task: prepare
-        vars:
-          ENV: dev
-
   proto:
     cmds:
       - substreams protogen ./substreams.yaml --exclude-paths="sf/substreams,google"
@@ -25,9 +15,8 @@ tasks:
     cmds:
       - substreams pack ./substreams.yaml
 
-  roll:dev:
+  roll:
     cmds:
-      # - task: prepare:dev
       - task: proto
       - task: build
       - task: pack
