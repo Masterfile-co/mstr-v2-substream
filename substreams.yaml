@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/streamingfast/substreams/develop/schemas/manifest-schema.json
+
+specVersion: v0.1.0
+package:
+  name: mstr_v2
+  version: v0.1.0
+
+protobuf:
+  files:
+    - common.proto
+    - registry.proto
+    - safe.proto
+    - drop.proto
+    - masterfile.proto
+  importPaths:
+    - ./proto/v1
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ./target/wasm32-unknown-unknown/release/substreams.wasm
+
+modules:
+  - name: map_registry
+    kind: map
+    inputs:
+      - params: string
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:masterfile.registry.v1.Deployments
+
+  - name: store_deployments
+    kind: store
+    updatePolicy: set
+    valueType: proto:masterfile.registry.v1.Deployment
+    inputs:
+      - map: map_registry
+
+  - name: map_events
+    kind: map
+    inputs:
+      - params: string
+      - store: store_deployments
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:masterfile.events.v1.MasterfileEvents
+
+network: dev
+
+networks:
+  dev:
+    initialBlock:
+      map_registry: 44841100
+    params:
+      # Make sure address is lowercase
+      map_registry: registry=0x5e9fb6075e762fbce2e970f52bc57bbad812c9fb
+      map_events: registry_address=0x5e9fb6075e762fbce2e970f52bc57bbad812c9fb&chain_id=80001
+  stg:
+    initialBlock:
+      map_registry: 41877860
+    params:
+      # Make sure address is lowercase
+      map_registry: registry=0x8d764bea078d78a671c9efda3b2a7484f4376e02
+      map_events: registry_address=0x8d764bea078d78a671c9efda3b2a7484f4376e02&chain_id=80001
