@@ -35,7 +35,7 @@ pub fn map_registry(param: String, block: Block) -> Result<Deployments, Error> {
     let params: MapRegistryParams = serde_qs::from_str(&param).unwrap();
 
     for log in block.logs() {
-        if pretty_hex(&log.address()) == params.registry {
+        if pretty_hex(&log.address()) == params.registry.to_lowercase() {
             ////////////////////////////////////////////////////////////////////////////
             //                             	  Factories                               //
             ////////////////////////////////////////////////////////////////////////////
