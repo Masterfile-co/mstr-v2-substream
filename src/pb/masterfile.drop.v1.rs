@@ -39,7 +39,7 @@ pub mod drop_event {
 #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct DetailsSet {
         #[prost(string, tag="1")]
-        pub usdc: ::prost::alloc::string::String,
+        pub conduit: ::prost::alloc::string::String,
         #[prost(string, tag="2")]
         pub revenue_recipient: ::prost::alloc::string::String,
         #[prost(string, tag="3")]

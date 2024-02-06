@@ -58,7 +58,7 @@ message DropEvent {
 	}
 
 	message DetailsSet {
-		string usdc = 1;
+		string conduit = 1;
 		string revenue_recipient = 2;
 		string randomness_provider = 3;
 		uint64 start_date = 4;

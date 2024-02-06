@@ -39,7 +39,7 @@ pub fn extract_drop_event(log: &LogView) -> Option<drop_event::Event> {
     }
     if let Some(event) = DetailsSet::match_and_decode(log) {
         return Some(drop_event::Event::DetailsSet(drop_event::DetailsSet {
-            usdc: pretty_hex(&event.usdc),
+            conduit: pretty_hex(&event.conduit),
             revenue_recipient: pretty_hex(&event.revenue_recipient),
             randomness_provider: pretty_hex(&event.randomness_provider),
             start_date: event.start_date.to_u64(),
