@@ -84,6 +84,13 @@
     "stateMutability": "view",
     "type": "function",
     "inputs": [],
+    "name": "getConduit",
+    "outputs": [{ "name": "", "internalType": "address", "type": "address" }]
+  },
+  {
+    "stateMutability": "view",
+    "type": "function",
+    "inputs": [],
     "name": "getDomainSeparator",
     "outputs": [{ "name": "", "internalType": "bytes32", "type": "bytes32" }]
   },
@@ -218,13 +225,6 @@
     "outputs": [{ "name": "", "internalType": "uint256", "type": "uint256" }]
   },
   {
-    "stateMutability": "view",
-    "type": "function",
-    "inputs": [],
-    "name": "getUsdc",
-    "outputs": [{ "name": "", "internalType": "address", "type": "address" }]
-  },
-  {
     "stateMutability": "nonpayable",
     "type": "function",
     "inputs": [
@@ -262,7 +262,7 @@
           { "name": "startDate", "internalType": "uint64", "type": "uint64" },
           { "name": "endDate", "internalType": "uint64", "type": "uint64" },
           { "name": "numEditions", "internalType": "uint16", "type": "uint16" },
-          { "name": "usdc", "internalType": "address", "type": "address" },
+          { "name": "conduit", "internalType": "address", "type": "address" },
           {
             "name": "revenueRecipient",
             "internalType": "address",
@@ -420,7 +420,7 @@
           { "name": "startDate", "internalType": "uint64", "type": "uint64" },
           { "name": "endDate", "internalType": "uint64", "type": "uint64" },
           { "name": "numEditions", "internalType": "uint16", "type": "uint16" },
-          { "name": "usdc", "internalType": "address", "type": "address" },
+          { "name": "conduit", "internalType": "address", "type": "address" },
           {
             "name": "revenueRecipient",
             "internalType": "address",
@@ -595,7 +595,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "name": "usdc",
+        "name": "conduit",
         "internalType": "address",
         "type": "address",
         "indexed": true

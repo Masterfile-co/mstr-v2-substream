@@ -815,6 +815,65 @@
             }
         }
         #[derive(Debug, Clone, PartialEq)]
+        pub struct SetConduit {
+            pub conduit: Vec<u8>,
+        }
+        impl SetConduit {
+            const METHOD_ID: [u8; 4] = [184u8, 39u8, 29u8, 194u8];
+            pub fn decode(
+                call: &substreams_ethereum::pb::eth::v2::Call,
+            ) -> Result<Self, String> {
+                let maybe_data = call.input.get(4..);
+                if maybe_data.is_none() {
+                    return Err("no data to decode".to_string());
+                }
+                let mut values = ethabi::decode(
+                        &[ethabi::ParamType::Address],
+                        maybe_data.unwrap(),
+                    )
+                    .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
+                values.reverse();
+                Ok(Self {
+                    conduit: values
+                        .pop()
+                        .expect(INTERNAL_ERR)
+                        .into_address()
+                        .expect(INTERNAL_ERR)
+                        .as_bytes()
+                        .to_vec(),
+                })
+            }
+            pub fn encode(&self) -> Vec<u8> {
+                let data = ethabi::encode(
+                    &[ethabi::Token::Address(ethabi::Address::from_slice(&self.conduit))],
+                );
+                let mut encoded = Vec::with_capacity(4 + data.len());
+                encoded.extend(Self::METHOD_ID);
+                encoded.extend(data);
+                encoded
+            }
+            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
+                match call.input.get(0..4) {
+                    Some(signature) => Self::METHOD_ID == signature,
+                    None => false,
+                }
+            }
+        }
+        impl substreams_ethereum::Function for SetConduit {
+            const NAME: &'static str = "setConduit";
+            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
+                Self::match_call(call)
+            }
+            fn decode(
+                call: &substreams_ethereum::pb::eth::v2::Call,
+            ) -> Result<Self, String> {
+                Self::decode(call)
+            }
+            fn encode(&self) -> Vec<u8> {
+                self.encode()
+            }
+        }
+        #[derive(Debug, Clone, PartialEq)]
         pub struct SetDrop {
             pub drop: Vec<u8>,
         }
@@ -924,65 +983,6 @@
         }
         impl substreams_ethereum::Function for SetRandomnessProvider {
             const NAME: &'static str = "setRandomnessProvider";
-            fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                Self::match_call(call)
-            }
-            fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                Self::decode(call)
-            }
-            fn encode(&self) -> Vec<u8> {
-                self.encode()
-            }
-        }
-        #[derive(Debug, Clone, PartialEq)]
-        pub struct SetUsdc {
-            pub usdc: Vec<u8>,
-        }
-        impl SetUsdc {
-            const METHOD_ID: [u8; 4] = [203u8, 20u8, 104u8, 121u8];
-            pub fn decode(
-                call: &substreams_ethereum::pb::eth::v2::Call,
-            ) -> Result<Self, String> {
-                let maybe_data = call.input.get(4..);
-                if maybe_data.is_none() {
-                    return Err("no data to decode".to_string());
-                }
-                let mut values = ethabi::decode(
-                        &[ethabi::ParamType::Address],
-                        maybe_data.unwrap(),
-                    )
-                    .map_err(|e| format!("unable to decode call.input: {:?}", e))?;
-                values.reverse();
-                Ok(Self {
-                    usdc: values
-                        .pop()
-                        .expect(INTERNAL_ERR)
-                        .into_address()
-                        .expect(INTERNAL_ERR)
-                        .as_bytes()
-                        .to_vec(),
-                })
-            }
-            pub fn encode(&self) -> Vec<u8> {
-                let data = ethabi::encode(
-                    &[ethabi::Token::Address(ethabi::Address::from_slice(&self.usdc))],
-                );
-                let mut encoded = Vec::with_capacity(4 + data.len());
-                encoded.extend(Self::METHOD_ID);
-                encoded.extend(data);
-                encoded
-            }
-            pub fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
-                match call.input.get(0..4) {
-                    Some(signature) => Self::METHOD_ID == signature,
-                    None => false,
-                }
-            }
-        }
-        impl substreams_ethereum::Function for SetUsdc {
-            const NAME: &'static str = "setUsdc";
             fn match_call(call: &substreams_ethereum::pb::eth::v2::Call) -> bool {
                 Self::match_call(call)
             }
