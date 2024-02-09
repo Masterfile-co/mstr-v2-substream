@@ -62,3 +62,10 @@ networks:
       # Make sure address is lowercase
       map_registry: registry=0xc89044f4c279b6c5ee9e07fa17db0e78d961eebd
       map_events: registry_address=0xc89044f4c279b6c5ee9e07fa17db0e78d961eebd&chain_id=137
+  prd:
+    initialBlock:
+      map_registry: 53326650
+    params:
+      # Make sure address is lowercase
+      map_registry: registry=0xc7e474817bdc227eaf1cccb416a53b3472f4bffe
+      map_events: registry_address=0xc7e474817bdc227eaf1cccb416a53b3472f4bffe&chain_id=137
