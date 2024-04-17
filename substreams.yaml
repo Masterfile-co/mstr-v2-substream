@@ -3,7 +3,7 @@
 specVersion: v0.1.0
 package:
   name: mstr_v2
-  version: v0.1.1
+  version: v0.1.2
 
 protobuf:
   files:
@@ -50,11 +50,11 @@ network: dev
 networks:
   dev:
     initialBlock:
-      map_registry: 44841100
+      map_registry: 5719440
     params:
       # Make sure address is lowercase
-      map_registry: registry=0x5e9fb6075e762fbce2e970f52bc57bbad812c9fb
-      map_events: registry_address=0x5e9fb6075e762fbce2e970f52bc57bbad812c9fb&chain_id=80001
+      map_registry: registry=0x51a27160bc067d31c0ac8bfad70db7fd49504aa1
+      map_events: registry_address=0x51a27160bc067d31c0ac8bfad70db7fd49504aa1&chain_id=11155111
   stg:
     initialBlock:
       map_registry: 52675760
