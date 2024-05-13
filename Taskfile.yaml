@@ -32,9 +32,9 @@ tasks:
     cmds:
       - task: run
         vars:
-          START_BLOCK: 44841100
-          STOP_BLOCK: 44841398
-          FIREHOSE_URL: mumbai.streamingfast.io:443
+          START_BLOCK: 5719440
+          STOP_BLOCK: 5719450
+          FIREHOSE_URL: sepolia.eth.streamingfast.io:443
           NETWORK: dev
 
   # TODO: Use staging values here. Right now just fake dev values
